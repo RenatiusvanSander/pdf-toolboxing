@@ -103,7 +103,7 @@ public class PDFComplexInvoiceBuilder {
 
 	    DocumentInformationBuilder documentInformationBuilder = populateDocumentInformationBuilder(contentLayout);
 	    document.setDocumentInformation(documentInformationBuilder.build());
-	    document.save("C:\\Users\\Remy Meier\\apache-pdfbox-tutorials\\invoice_generated.pdf");
+	    document.save("C:\\Users\\Remy Meier\\2023-09-eclipse-workspace\\pdf-toolboxing\\invoice_generated.pdf");
 	    document.close();
 	    System.out.println("Document created.");
 	  }
