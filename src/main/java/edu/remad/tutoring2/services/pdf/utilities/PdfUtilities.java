@@ -1,8 +1,9 @@
 package edu.remad.tutoring2.services.pdf.utilities;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.io.File;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
@@ -40,6 +41,24 @@ public class PdfUtilities {
 			contentLayoutData.setContactEmail(ContentLayoutDataConstants.CONTACT_EMAIL);
 			contentLayoutData.setDayFormatter(TimeAppConstants.GERMAN_DATE_FORMATTER);
 			contentLayoutData.setTimeFormatter(TimeAppConstants.TIME_FORMATTER);
+			contentLayoutData.setTableHeaderColor(ContentLayoutDataConstants.TABLE_HEADER_COLOR);
+			contentLayoutData.setTableBodyColor(ContentLayoutDataConstants.TABLE_BODY_COLOR);
+			contentLayoutData.setPaymentMethods(ContentLayoutDataConstants.PAYMENT_METHODS);
+			contentLayoutData.setPaymentMethodColor(ContentLayoutDataConstants.PAYMENT_METHOD_COLOR);
+			contentLayoutData.setTutoringAppointmentDate(tutoringAppointment.getTutoringAppointmentDate().format(TimeAppConstants.GERMAN_DATE_FORMATTER));
+			contentLayoutData.setInvoiceCreationDate(invoice.getInvoiceCreationDate().format(TimeAppConstants.GERMAN_DATE_FORMATTER));
+			contentLayoutData.setCapitalFontSize(ContentLayoutDataConstants.CAPITAL_FONT_SIZE);
+			contentLayoutData.setTextFontSize(ContentLayoutDataConstants.TEXT_FONT_SIZE);
+			contentLayoutData.setPaymentMethodFontSize(ContentLayoutDataConstants.PAYMENT_METHOD_FONT_SIZE);
+			contentLayoutData.setbottomLine(ContentLayoutDataConstants.BOTTOM_LINE);
+			contentLayoutData.setBottomLineFontSize(ContentLayoutDataConstants.BOTTOM_LINE_FONT_SIZE);
+			contentLayoutData.setBottomLineFontColor(ContentLayoutDataConstants.BOTTOM_LINE_FONT_COLOR);
+			contentLayoutData.setBottomLineWidth(ContentLayoutDataConstants.BOTTOM_LINE_WIDTH);
+			contentLayoutData.setBottomRectColor(ContentLayoutDataConstants.BOTTOM_RECT_COLOR);
+			contentLayout.setBottomRect(ContentLayoutDataConstants.BOTTOM_RECT);
+			contentLayout.setAuthoSign("Unterschrift");
+			contentLayout.setAuthoSignColor(Color.BLACK);
+			contentLayout.setTableCellWidths(new int[] { 80, 230, 70, 80, 80 });
 			
 			return contentLayoutData;
 		} catch (RuntimeException e) {
