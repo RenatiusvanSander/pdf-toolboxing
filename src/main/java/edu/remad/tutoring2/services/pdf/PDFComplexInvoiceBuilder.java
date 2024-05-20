@@ -2,6 +2,7 @@ package edu.remad.tutoring2.services.pdf;
 
 import java.awt.Color;
 import java.awt.Rectangle;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -108,11 +109,20 @@ public class PDFComplexInvoiceBuilder {
 
 			DocumentInformationBuilder documentInformationBuilder = populateDocumentInformationBuilder(contentLayout);
 			document.setDocumentInformation(documentInformationBuilder.build());
-			document.save("C:\\Users\\Remy Meier\\2023-09-eclipse-workspace\\pdf-toolboxing\\invoice_generated.pdf");
-			document.close();
-			System.out.println("Document created.");
-		} catch(IOException e) {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			try {
+				document.save(
+						"C:\\Users\\Remy Meier\\2023-09-eclipse-workspace\\pdf-toolboxing\\invoice_generated.pdf");
+				document.save(out);
+			} catch (IOException e) {
+
+			}
 			
+			byte[] invoice = out.toByteArray();
+			out.close();
+			System.out.println("Document created.");
+		} catch (IOException e) {
+
 		}
 	}
 

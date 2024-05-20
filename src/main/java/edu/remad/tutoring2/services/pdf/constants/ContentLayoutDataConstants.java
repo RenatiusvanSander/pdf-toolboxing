@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.List;
 
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.w3c.dom.css.Rect;
 
@@ -59,4 +61,16 @@ public class ContentLayoutDataConstants {
 	public static final Color BOTTOM_RECT_COLOR = new Color(255, 91, 0);
 
 	public static final Rectangle BOTTOM_RECT = new Rectangle(0, 0, 0, 30);
+	
+	public static final String AUTHO_SIGN = "Unterschrift";
+	
+	public static final Color AUTHO_SIGN_COLOR = Color.BLACK;
+	
+	public static final int[] TABLE_CELL_WIDTHS = new int[] { 80, 230, 70, 80, 80 };
+	
+	public static final Integer TABLE_CELL_HEIGHT = 30;
+	
+	public static final List<String> TABLE_HEADERS = List.of("Position", "Beschreibung", "Preis", "Menge", "Gesamt");
+	
+	public static final PDPage PAGE = new PDPage(PDRectangle.A4);
 }

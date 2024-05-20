@@ -1,7 +1,6 @@
 package edu.remad.tutoring2.services.pdf.constants;
 
-import java.awt.Color;
-import java.awt.Rectangle;
+import java.util.List;
 
 public class CustomPdfSettingsConstants {
 	
@@ -49,4 +48,14 @@ public class CustomPdfSettingsConstants {
 	public static final String BOTTOM_RECT_COLOR_KEY = "bottomRectColor";
 	
 	public static final String BOTTOM_RECT_KEY = "bottomRect";
+	
+	public static final String AUTHO_SIGN_KEY = "authoSign";
+	
+	public static final String AUTHO_SIGN_COLOR_KEY = "authoSignColor";
+	
+	public static final String TABLE_CELL_WIDTHS_KEY = "tableCellWidths";
+	
+	public static final String TABLE_CELL_HEIGHT_KEY = "tableCellHeight";
+	
+	public static final String TABLE_HEADERS_KEY = "tableHeaders";
 }
