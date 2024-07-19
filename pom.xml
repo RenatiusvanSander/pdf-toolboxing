@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>edu.remad</groupId>
 			<artifactId>tutoring2-models</artifactId>
-			<version>1.0.2-SNAPSHOT</version>
+			<version>1.0.3-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
