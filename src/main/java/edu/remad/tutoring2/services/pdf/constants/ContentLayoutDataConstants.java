@@ -73,4 +73,21 @@ public class ContentLayoutDataConstants {
 	public static final List<String> TABLE_HEADERS = List.of("Position", "Beschreibung", "Preis", "Menge", "Gesamt");
 	
 	public static final PDPage PAGE = new PDPage(PDRectangle.A4);
+	
+	public static final String INVOICE_NO_LABEL = "Rechnungsnummer";
+	
+	public static final String INVOICE_DATE_LABEL = "Rechnungsdatum";
+	
+	public static final String INVOICE_PERFORMANCE_DATE_LABEL = "Leistungsdatum";
+	
+	public static final String[] VALUE_ADDED_TAX_DISCLAIMER_TEXT =
+			new String[] { "Gemäß § 19 UStG wird keine Umsatzsteuer berechnet." };
+	
+	public static final String DOCUMENT_INFORMATION_CREATOR = "Tutoring App";
+	
+	public static final String DOCUMENT_INFORMATION_KEYWORD_INVOICE = "Rechnung";
+	
+	public static final String CONTACT_ZIP = "22359";
+	
+	public static final String CONTACT_LOCATION = "Hamburg";
 }

@@ -1,7 +1,6 @@
 package edu.remad.tutoring2.services.pdf;
 
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -17,12 +16,20 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import edu.remad.tutoring2.models.InvoiceEntity;
+import edu.remad.tutoring2.services.pdf.constants.ContentLayoutDataConstants;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationBuilder;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationUtilities;
+import edu.remad.tutoring2.services.pdf.exceptions.PDFComplexInvoiceBuilderException;
 import edu.remad.tutoring2.services.pdf.pagecontent.PDFCreationBuilder;
 import edu.remad.tutoring2.services.pdf.pagecontent.SinglePageContentLayouter;
+import edu.remad.tutoring2.services.pdf.utilities.PdfUtilities;
 
 public class PDFComplexInvoiceBuilder {
+
+	private InvoiceEntity invoice;
+
+	private PDDocument pdfDoucment;
 
 	/**
 	 * Runs creation of complex invoice
@@ -33,52 +40,48 @@ public class PDFComplexInvoiceBuilder {
 	public static void main(String[] args) throws IOException {
 		try (PDDocument document = new PDDocument()) {
 			PDFCreationBuilder pdfBuilder = new PDFCreationBuilder();
-
-			// PDDocument document = new PDDocument();
 			PDPage firstPage = new PDPage(PDRectangle.A4);
 			document.addPage(firstPage);
 
 			ContentLayoutData contentLayout = new ContentLayoutData();
 			contentLayout.setCustomerName("Sharon", "Tetteh");
-			File logo = new File("src/main/resources/img/logo.png");
+			File logo = new File(ContentLayoutDataConstants.LOGO_FILE_PATH);
 			contentLayout.setLogo(logo);
 			contentLayout.setFont(PDType1Font.HELVETICA);
 			contentLayout.setItalicFont(PDType1Font.HELVETICA_OBLIQUE);
 			contentLayout.setFontColor(Color.BLACK);
 			contentLayout.setStreetHouseNumber("Karl-Arnold-Ring", "26");
 			contentLayout.setLocationZipCode("21109", "Hamburg");
-			contentLayout.setContactCompany("Remy Meier Freelance Nachhilfe");
-			contentLayout.setContactName("Remy Meier");
-			contentLayout.setContactStreetHouseNo("Volksdorfer Grenzweg 40A");
-			contentLayout.setContactZipAndLocation("22359 Hamburg");
-			contentLayout.setContactMobile("+49 176 61 36 22 53");
-			contentLayout.setContactEmail("remad@web.de");
+			contentLayout.setContactCompany(ContentLayoutDataConstants.CONTACT_COMPANY);
+			contentLayout.setContactName(ContentLayoutDataConstants.CONTACT_NAME);
+			contentLayout.setContactStreetHouseNo(ContentLayoutDataConstants.CONTACT_STREET_HOUSE_NO);
+			contentLayout.setContactZipAndLocation(
+					ContentLayoutDataConstants.CONTACT_ZIP + " " + ContentLayoutDataConstants.CONTACT_LOCATION);
+			contentLayout.setContactMobile(ContentLayoutDataConstants.CONTACT_MOBILE);
+			contentLayout.setContactEmail(ContentLayoutDataConstants.CONTACT_EMAIL);
 			contentLayout.setInvoiceNo("151");
 			contentLayout.setDayFormatter(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 			contentLayout.setTimeFormatter(DateTimeFormatter.ofPattern("HH:mm"));
-			contentLayout.setTableHeaderColor(new Color(240, 93, 11));
-			contentLayout.setTableBodyColor(new Color(219, 218, 198));
-			List<String> paymentMethods = List.of("Paypal: remad@web.de",
-					"Überweisung: DE62 1203 0000 1071 0649 66 / BYLADEM1001", "Bargeld", "Kleinanzeigen.de-Methoden");
-			contentLayout.setPaymentMethods(paymentMethods);
-			contentLayout.setPaymentMethodColor(new Color(122, 122, 122));
+			contentLayout.setTableHeaderColor(ContentLayoutDataConstants.TABLE_HEADER_COLOR);
+			contentLayout.setTableBodyColor(ContentLayoutDataConstants.TABLE_BODY_COLOR);
+			contentLayout.setPaymentMethods(ContentLayoutDataConstants.PAYMENT_METHODS);
+			contentLayout.setPaymentMethodColor(ContentLayoutDataConstants.PAYMENT_METHOD_COLOR);
 			contentLayout.setTutoringAppointmentDate("12/07/2024");
 			contentLayout.setInvoiceCreationDate("12/07/2024");
-			contentLayout.setCapitalFontSize(12F);
-			contentLayout.setTextFontSize(16F);
-			contentLayout.setPaymentMethodFontSize(10F);
-			contentLayout.setbottomLine("Lernen ist das halbe Leben!");
-			contentLayout.setBottomLineFontSize(20);
+			contentLayout.setCapitalFontSize(ContentLayoutDataConstants.CAPITAL_FONT_SIZE);
+			contentLayout.setTextFontSize(ContentLayoutDataConstants.TEXT_FONT_SIZE);
+			contentLayout.setPaymentMethodFontSize(ContentLayoutDataConstants.PAYMENT_METHOD_FONT_SIZE);
+			contentLayout.setbottomLine(ContentLayoutDataConstants.BOTTOM_LINE);
+			contentLayout.setBottomLineFontSize(ContentLayoutDataConstants.BOTTOM_LINE_FONT_SIZE);
 			contentLayout.setBottomLineFontColor(Color.DARK_GRAY);
-			contentLayout.setBottomLineWidth(20F);
-			contentLayout.setBottomRectColor(new Color(255, 91, 0));
-			contentLayout.setBottomRect(new Rectangle(0, 0, 0, 30));
-			contentLayout.setAuthoSign("Unterschrift");
-			contentLayout.setAuthoSignColor(Color.BLACK);
-			contentLayout.setTableCellWidths(new int[] { 80, 230, 70, 80, 80 });
-			contentLayout.setTableCellHeight(30);
-			List<String> tableHeaders = List.of("Position", "Beschreibung", "Preis", "Menge", "Gesamt");
-			contentLayout.setTableHeaders(tableHeaders);
+			contentLayout.setBottomLineWidth(ContentLayoutDataConstants.BOTTOM_LINE_WIDTH);
+			contentLayout.setBottomRectColor(ContentLayoutDataConstants.BOTTOM_RECT_COLOR);
+			contentLayout.setBottomRect(ContentLayoutDataConstants.BOTTOM_RECT);
+			contentLayout.setAuthoSign(ContentLayoutDataConstants.AUTHO_SIGN);
+			contentLayout.setAuthoSignColor(ContentLayoutDataConstants.AUTHO_SIGN_COLOR);
+			contentLayout.setTableCellWidths(ContentLayoutDataConstants.TABLE_CELL_WIDTHS);
+			contentLayout.setTableCellHeight(ContentLayoutDataConstants.TABLE_CELL_HEIGHT);
+			contentLayout.setTableHeaders(ContentLayoutDataConstants.TABLE_HEADERS);
 			List<Map<String, String>> tableRows = new ArrayList<>();
 			Map<String, String> row1 = new LinkedHashMap<>();
 			row1.put("Position", "1");
@@ -90,39 +93,38 @@ public class PDFComplexInvoiceBuilder {
 			contentLayout.setTableRows(tableRows);
 			contentLayout.setPageWidth((int) firstPage.getTrimBox().getWidth());
 			contentLayout.setPageHeight((int) firstPage.getTrimBox().getHeight());
-			contentLayout.setInvoiceNoLabel("Rechnungsnummer");
-			contentLayout.setInvoiceDateLabel("Rechnungsdatum");
-			contentLayout.setInvoicePerformanceDateLabel("Leistungsdatum");
-			contentLayout.setValueAddedTaxDisclaimerText(
-					new String[] { "Gemäß § 19 UStG wird keine Umsatzsteuer berechnet." });
-			contentLayout.setDocumentInformationCreator("Tutoring App");
-			contentLayout.getDocumentInformationCreator();
+			contentLayout.setInvoiceNoLabel(ContentLayoutDataConstants.INVOICE_NO_LABEL);
+			contentLayout.setInvoiceDateLabel(ContentLayoutDataConstants.INVOICE_DATE_LABEL);
+			contentLayout.setInvoicePerformanceDateLabel(ContentLayoutDataConstants.INVOICE_PERFORMANCE_DATE_LABEL);
+			contentLayout.setValueAddedTaxDisclaimerText(ContentLayoutDataConstants.VALUE_ADDED_TAX_DISCLAIMER_TEXT);
+			contentLayout.setDocumentInformationCreator(ContentLayoutDataConstants.DOCUMENT_INFORMATION_CREATOR);
 			contentLayout.setDocumentInformationKeywords(
-					new String[] { "Rechnung", "151", contentLayout.getCustomerName() });
+					new String[] { ContentLayoutDataConstants.DOCUMENT_INFORMATION_KEYWORD_INVOICE, "151",
+							contentLayout.getCustomerName() });
 			contentLayout.getDocumentInformationKeywords();
 			contentLayout.setHasMainContentLayoutData(true);
 
 			PDPageContentStream contentStream = new PDPageContentStream(document, firstPage);
 			SinglePageContentLayouter pageContenLayouter = new SinglePageContentLayouter(document, firstPage,
 					contentLayout, contentStream);
+			pageContenLayouter.build();
 			contentStream.close();
 
 			DocumentInformationBuilder documentInformationBuilder = populateDocumentInformationBuilder(contentLayout);
 			document.setDocumentInformation(documentInformationBuilder.build());
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			try {
-				document.save(
-						"C:\\Users\\remad\\invoice_generated.pdf");
+				document.save("C:\\Users\\remad\\invoice_generated.pdf");
 				document.save(out);
 			} catch (IOException e) {
-
+				throw new PDFComplexInvoiceBuilderException("Demo PDF not saved!", e);
 			}
-			
+
 			byte[] invoice = out.toByteArray();
 			out.close();
 			System.out.println("Document created.");
 		} catch (IOException e) {
-
+			throw new PDFComplexInvoiceBuilderException("Demo Document not saved as Byte-Array.", e);
 		}
 	}
 
@@ -136,5 +138,61 @@ public class PDFComplexInvoiceBuilder {
 		builder.setKeywords(contentLayout.getDocumentInformationKeywords());
 
 		return builder;
+	}
+
+	public PDFComplexInvoiceBuilder invoice(InvoiceEntity invoice) {
+		this.invoice = invoice;
+
+		return this;
+	}
+
+	public byte[] build() {
+		return buildDocument(PdfUtilities.createContentLayoutData2(invoice));
+	}
+
+	private byte[] buildDocument(ContentLayoutData contentLayout) {
+		try (PDDocument document = pdfDoucment != null ? pdfDoucment : new PDDocument();
+				ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+
+			if (pdfDoucment == null) {
+				PDPage firstPage = ContentLayoutDataConstants.PAGE;
+				document.addPage(firstPage);
+				buildPageContent(contentLayout, document, firstPage);
+			}
+
+			document.setDocumentInformation(populateDocumentInformationBuilder(contentLayout).build());
+
+			try {
+				document.save(out);
+			} catch (IOException e) {
+				throw new RuntimeException();
+			}
+
+			return out.toByteArray();
+		} catch (PDFComplexInvoiceBuilderException | IOException e) {
+			throw new PDFComplexInvoiceBuilderException("Invoice was not created.", e);
+		}
+	}
+
+	private void buildPageContent(ContentLayoutData contentLayout, PDDocument document, PDPage firstPage) {
+		try (PDPageContentStream contentStream = new PDPageContentStream(document, firstPage)) {
+			new SinglePageContentLayouter(document, firstPage, contentLayout, contentStream).build();
+		} catch (Exception e) {
+			throw new PDFComplexInvoiceBuilderException("Invoice page content was not rendered", e);
+		}
+	}
+
+	public PDPage buildPage() {
+		try (PDDocument document = new PDDocument()) {
+			ContentLayoutData contentLayout = PdfUtilities.createContentLayoutData2(invoice);
+			PDPage firstPage = ContentLayoutDataConstants.PAGE;
+			document.addPage(firstPage);
+			buildPageContent(contentLayout, document, firstPage);
+			this.pdfDoucment = document;
+
+			return firstPage;
+		} catch (IOException e) {
+			throw new PDFComplexInvoiceBuilderException("PDF Page was not created.", e);
+		}
 	}
 }

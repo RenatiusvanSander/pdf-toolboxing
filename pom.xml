@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.remad</groupId>
 	<artifactId>pdf-toolboxing</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.10.1-SNAPSHOT</version>
 
 	<properties>
 		<maven.compiler.target>11</maven.compiler.target>
@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>edu.remad</groupId>
 			<artifactId>tutoring2-models</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>1.0.4-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

@@ -1,7 +1,5 @@
 package edu.remad.tutoring2.services.pdf.constants;
 
-import java.util.List;
-
 public class CustomPdfSettingsConstants {
 	
 	/**

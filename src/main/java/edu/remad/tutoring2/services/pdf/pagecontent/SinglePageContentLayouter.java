@@ -80,14 +80,12 @@ public class SinglePageContentLayouter {
     this.contentLayoutData = contentLayoutData;
     this.pageContentStream = pageContentStream;
     this.pdfPageContentTextLayouter = new PDFPageContentTextLayouter(pdfDocument, pageContentStream);
-
-    build();
   }
 
   /**
    * Build the content and layouts
    */
-  private void build() throws IOException {
+  public void build() throws IOException {
     generateLogo();
     generateCompanyNameOverLogo();
     generateContactDetail();
