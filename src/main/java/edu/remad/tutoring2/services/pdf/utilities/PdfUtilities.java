@@ -3,6 +3,8 @@ package edu.remad.tutoring2.services.pdf.utilities;
 import java.awt.Color;
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -83,6 +85,7 @@ public class PdfUtilities {
 			contentLayoutData.setDocumentInformationKeywords(
 					new String[] { ContentLayoutDataConstants.DOCUMENT_INFORMATION_KEYWORD_INVOICE, String.valueOf(invoice.getInvoiceNo()), contentLayoutData.getCustomerName() });
 			contentLayoutData.setHasMainContentLayoutData(true);
+			contentLayoutData.setSplitDelimiter("\\.");
 
 			return contentLayoutData;
 		} catch (RuntimeException e) {
@@ -149,6 +152,7 @@ public class PdfUtilities {
 			contentLayoutData.setDocumentInformationKeywords(
 					new String[] { ContentLayoutDataConstants.DOCUMENT_INFORMATION_KEYWORD_INVOICE, String.valueOf(invoice.getInvoiceNo()), contentLayoutData.getCustomerName() });
 			contentLayoutData.setHasMainContentLayoutData(true);
+			contentLayoutData.setSplitDelimiter("\\.");
 
 			return contentLayoutData;
 		} catch (RuntimeException e) {
@@ -159,7 +163,7 @@ public class PdfUtilities {
 
 	public static List<Map<String, String>> createTableRows(TutoringAppointmentEntity tutoringAppointment,
 			InvoiceEntity invoice) {
-		BigDecimal price = invoice.getPrice().getPrice();
+		BigDecimal price = invoice.getPrice().getPrice().setScale(2, RoundingMode.HALF_UP);
 		List<Map<String, String>> tableRows = new ArrayList<>();
 		Map<String, String> row1 = new LinkedHashMap<>();
 		row1.put(ContentLayoutDataConstants.TABLE_HEADERS.get(0), "1");
@@ -174,7 +178,7 @@ public class PdfUtilities {
 	}
 	
 	public static List<Map<String, String>> createTableRows(InvoiceEntity invoice) {
-		BigDecimal price = invoice.getPrice().getPrice();
+		BigDecimal price = invoice.getPrice().getPrice().setScale(2, RoundingMode.HALF_UP);
 		List<Map<String, String>> tableRows = new ArrayList<>();
 		Map<String, String> row1 = new LinkedHashMap<>();
 		row1.put(ContentLayoutDataConstants.TABLE_HEADERS.get(0), "1");
@@ -189,7 +193,7 @@ public class PdfUtilities {
 	}
 
 	public static File createLogo() {
-		return new File(ContentLayoutDataConstants.LOGO_FILE_PATH);
+		return new File("img/logo.png");
 	}
 
 	public static File createCustomLogo() {

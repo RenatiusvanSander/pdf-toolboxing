@@ -142,6 +142,7 @@ public class ContentLayoutData {
   private String[] documentInformationKeywords;
   private String subject;
   private String tableRowsFullPrice;
+  private String splitDelimiter = null;
 
   public String getInvoiceNoLabel() {
     return invoiceNoLabel;
@@ -680,6 +681,7 @@ public class ContentLayoutData {
 
         if(price != null && price.length() > 2) {
           price = price.replace(" EUR","");
+          price = price.replace("EUR","");
           double doublePrice = Double.parseDouble(price);
           sum += doublePrice;
         }
@@ -691,4 +693,12 @@ public class ContentLayoutData {
 
     return tableRowsFullPrice;
   }
+
+public String getSplitDelimiter() {
+	return splitDelimiter;
+}
+
+public void setSplitDelimiter(String splitDelimiter) {
+	this.splitDelimiter = splitDelimiter;
+}
 }
