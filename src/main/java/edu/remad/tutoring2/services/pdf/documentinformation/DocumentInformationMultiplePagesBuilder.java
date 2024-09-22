@@ -1,10 +1,12 @@
 package edu.remad.tutoring2.services.pdf.documentinformation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 
@@ -32,7 +34,7 @@ public class DocumentInformationMultiplePagesBuilder {
 			invoiceNumbers[index] = Long.valueOf(contentLayoutData.getInvoiceNo());
 			creators[index] = contentLayoutData.getCreator();
 			subjects[index] = contentLayoutData.getSubject();
-			keywords[index] = contentLayoutData.getDocumentInformationKeywords();
+			keywords[index] = contentLayoutData.getDocumentInformationKeywordByIndex(index);
 			index++;
 		}
 	}
@@ -156,13 +158,19 @@ public class DocumentInformationMultiplePagesBuilder {
 	 */
 	public PDDocumentInformation build() {
 		PDDocumentInformation documentInformation = new PDDocumentInformation();
-		documentInformation.setAuthor(this.authors != null && this.authors.length() > 2 ? this.authors : EMPTY_STRING);
-		String invoiceTitle = this.invoiceNumbers != null && this.invoiceNumbers > 0 ? this.invoiceNumbers.toString()
-				: EMPTY_STRING;
+		documentInformation.setAuthor(this.authors != null && this.authors.length > 1
+				? Arrays.asList(this.authors).stream().collect(Collectors.joining(" "))
+				: this.authors[0]);
+		String invoiceTitle = this.invoiceNumbers != null && this.invoiceNumbers.length > 1
+				? Arrays.asList(this.invoiceNumbers).stream().map(String::valueOf).collect(Collectors.joining(" "))
+				: String.valueOf(this.invoiceNumbers[0]);
 		documentInformation.setTitle(INVOICE_TITLE_PREFIX + invoiceTitle);
-		documentInformation.setCreator(this.creators != null && creators.length() > 2 ? this.creators : EMPTY_STRING);
-		documentInformation
-				.setSubject(this.subjects != null && this.subjects.length() > 2 ? this.subjects : EMPTY_STRING);
+		documentInformation.setCreator(this.creators != null && this.creators.length > 1
+				? Arrays.asList(this.creators).stream().collect(Collectors.joining(" "))
+				: this.creators[0]);
+		documentInformation.setSubject(this.subjects != null && this.subjects.length > 1
+				? Arrays.asList(this.subjects).stream().collect(Collectors.joining(" "))
+				: this.subjects[0]);
 
 		Calendar convertedCreationDate = new GregorianCalendar();
 		convertedCreationDate.setTime(this.creationDate != null ? this.creationDate : new Date());

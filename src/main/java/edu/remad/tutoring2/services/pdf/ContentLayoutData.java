@@ -655,6 +655,14 @@ public class ContentLayoutData {
   public String[] getDocumentInformationKeywords() {
     return this.documentInformationKeywords;
   }
+  
+  public String getDocumentInformationKeywordByIndex(int index) {
+	  if(index == this.documentInformationKeywords.length || index > this.documentInformationKeywords.length) {
+		return "";  
+	  }
+	  
+	    return this.documentInformationKeywords[index];
+	  }
 
   public String getSubject() {
     if( (subject == null || subject.length() < 2) && (invoiceNoLabel != null && invoiceNo != null)) {
