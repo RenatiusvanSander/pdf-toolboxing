@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import edu.remad.tutoring2.services.pdf.ContentLayoutData;
 
@@ -39,5 +41,17 @@ public final class DocumentInformationUtilities {
 		String joinedKeywords = Arrays.asList(documentInformationKeywords).stream().collect(Collectors.joining(", "));
 
 		return joinedKeywords;
+	}
+	
+	public static String arrayToString(String[] array) {
+		Set<String> withoutDuplicates = Arrays.asList(array).stream().collect(Collectors.toSet());
+		
+		return withoutDuplicates.stream().collect(Collectors.joining(" "));
+	}
+	
+	public static String longArrayToJoinedString(Long[] array) {
+		Set<Long> withOutDuplicates = Stream.of(array).collect(Collectors.toSet());
+		
+		return withOutDuplicates.stream().map(String::valueOf).collect(Collectors.joining(" "));
 	}
 }
