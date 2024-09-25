@@ -11,6 +11,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import edu.remad.tutoring2.services.pdf.ContentLayoutData;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationBuilder;
+import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationMultiplePagesBuilder;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationUtilities;
 
 /**
@@ -18,116 +19,123 @@ import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationU
  */
 public class PDFCreationBuilder {
 
-  /**
-   * empty in-memory PDF document
-   */
-  private final PDDocument pdfDocument;
+	/**
+	 * empty in-memory PDF document
+	 */
+	private final PDDocument pdfDocument;
 
-  /**
-   * PDF page to add to PDF document
-   */
-  private final ArrayList<PDPage> pdfPages;
+	/**
+	 * PDF page to add to PDF document
+	 */
+	private final ArrayList<PDPage> pdfPages;
 
-  /**
-   * pdf document information
-   */
-  private PDDocumentInformation documentInformation;
+	/**
+	 * pdf document information
+	 */
+	private PDDocumentInformation documentInformation;
 
-  /**
-   * several contentLayoutDatas'
-   */
-  private final List<ContentLayoutData> contentLayoutDataList;
+	/**
+	 * several contentLayoutDatas'
+	 */
+	private final List<ContentLayoutData> contentLayoutDataList;
 
-  /**
-   * PDFCreationBuilder constructor
-   */
-  public PDFCreationBuilder() {
-    pdfDocument = new PDDocument();
-    pdfPages = new ArrayList<>();
-    documentInformation = new PDDocumentInformation();
-    contentLayoutDataList = new ArrayList<>();
-  }
+	/**
+	 * PDFCreationBuilder constructor
+	 */
+	public PDFCreationBuilder() {
+		pdfDocument = new PDDocument();
+		pdfPages = new ArrayList<>();
+		contentLayoutDataList = new ArrayList<>();
+	}
 
-  /**
-   * Adds page
-   *
-   * @param page PDF page to add to pdf document
-   * @return PDF creation builder
-   */
-  public PDFCreationBuilder addPage(PDPage page) {
-    this.pdfPages.add(page);
+	/**
+	 * Adds pages.
+	 *
+	 * @param pages PDF pages to add to document
+	 * @return PDF creation builder
+	 */
+	public PDFCreationBuilder addPages(List<PDPage> pages) {
+		this.pdfPages.addAll(pages);
 
-    return this;
-  }
+		return this;
+	}
+	
+	/**
+	 * set content layout data.
+	 * 
+	 * @param contentLayoutDatas a list of {@link ContentLayoutData} instances
+	 */
+	public PDFCreationBuilder contentLayoutData(List<ContentLayoutData> contentLayoutDatas) {
+		this.contentLayoutDataList.addAll(contentLayoutDatas);
+		
+		return this;
+	}
 
-  /**
-   * Adds pages.
-   *
-   * @param pages PDF pages to add to document
-   * @return PDF creation builder
-   */
-  public PDFCreationBuilder addPages(List<PDPage> pages) {
-    this.pdfPages.addAll(pages);
+	private void createDocumentInformation() {
+		if (contentLayoutDataList != null && contentLayoutDataList.size() == 1) {
+			ContentLayoutData contentLayoutData = contentLayoutDataList.get(0);
+			documentInformation = new DocumentInformationBuilder().setAuthor(contentLayoutData.getContactName())
+					.setInvoiceNumber(Long.parseLong(contentLayoutData.getInvoiceNo()))
+					.setCreator(contentLayoutData.getCreator()).setSubject(contentLayoutData.getSubject())
+					.setCreationDate(DocumentInformationUtilities.extractCreationDate(contentLayoutData))
+					.setKeywords(contentLayoutData.getDocumentInformationKeywords()).build();
+		} else if (contentLayoutDataList != null && contentLayoutDataList.size() > 1) {
+			DocumentInformationMultiplePagesBuilder builder = new DocumentInformationMultiplePagesBuilder();
+			builder.contentLayoutDatas(contentLayoutDataList);
+			documentInformation = builder.build();
+		} else {
+			throw new RuntimeException();
+		}
+	}
 
-    return this;
-  }
+	/**
+	 * Builds PDF
+	 *
+	 * @return built PDF document
+	 */
+	public PDDocument build() throws IOException {
+		if (contentLayoutDataList != null && !contentLayoutDataList.isEmpty()) {
+			addEmptyPdfPages();
+			createDocumentInformation();
+			buildSinglePagePdfDocument();
+			buildMultiplePagesPdfDocument();
+			pdfDocument.setDocumentInformation(documentInformation);
 
-  /**
-   * Sets document information
-   *
-   * @param contentLayoutData@return PDF creation builder
-   */
-  public PDFCreationBuilder setDocumentInformation(ContentLayoutData contentLayoutData) {
-    this.documentInformation = new DocumentInformationBuilder()
-        .setAuthor(contentLayoutData.getContactName())
-        .setInvoiceNumber(Long.parseLong(contentLayoutData.getInvoiceNo()))
-        .setCreator(contentLayoutData.getCreator())
-        .setSubject(contentLayoutData.getSubject())
-        .setCreationDate(DocumentInformationUtilities.extractCreationDate(contentLayoutData))
-        .setKeywords(contentLayoutData.getDocumentInformationKeywords())
-        .build();
+			return this.pdfDocument;
+		}
 
-    return this;
-  }
+		throw new RuntimeException();
+	}
 
-  /**
-   * Builds PDF
-   *
-   * @return built PDF document
-   */
-  public PDDocument build() throws IOException {
-    buildSinglePagePdfDocument();
+	private void addEmptyPdfPages() {
+		for (ContentLayoutData contentLayoutData : this.contentLayoutDataList) {
+			pdfPages.add(new PDPage());
+		}
+	}
 
-      for (PDPage page : this.pdfPages) {
-        this.pdfDocument.addPage(page);
-      }
+	private void buildSinglePagePdfDocument() throws IOException {
+		if (pdfPages.size() == 1 && contentLayoutDataList.size() == 1) {
+			pdfDocument.addPage(pdfPages.get(0));
+			buildSinglePagePdfDocument(pdfPages.get(0), contentLayoutDataList.get(0));
+		}
+	}
 
-    this.pdfDocument.setDocumentInformation(this.documentInformation);
+	private void buildSinglePagePdfDocument(PDPage pdfPage, ContentLayoutData contentLayoutData) throws IOException {
+		PDPageContentStream pageContentStream = new PDPageContentStream(pdfDocument, pdfPages.get(0));
+		SinglePageContentLayouter contentLayouter = new SinglePageContentLayouter(pdfDocument, pdfPages.get(0),
+				contentLayoutDataList.get(0), pageContentStream);
+		contentLayouter.build();
+		pageContentStream.close();
+	}
 
-    return this.pdfDocument;
-  }
-
-  private void buildSinglePagePdfDocument() throws IOException {
-    if (pdfPages.size() == 1 && contentLayoutDataList.size() == 1) {
-      pdfDocument.addPage(pdfPages.get(0));
-      buildSinglePagePdfDocument(pdfPages.get(0), contentLayoutDataList.get(0));
-    }
-  }
-
-  private void buildSinglePagePdfDocument(PDPage pdfPage, ContentLayoutData contentLayoutData) throws IOException {
-    PDPageContentStream pageContentStream = new PDPageContentStream(pdfDocument, pdfPages.get(0));
-    SinglePageContentLayouter contentLayouter = new SinglePageContentLayouter(pdfDocument, pdfPages.get(0),
-            contentLayoutDataList.get(0), pageContentStream);
-    pageContentStream.close();
-  }
-
-  private void buildMultiplePagesPdfDocument() throws IOException {
-    int pdfPagesSize = pdfPages.size();
-    for (int index = 0; index < pdfPagesSize; index++) {
-      PDPage page = pdfPages.get(index);
-      pdfDocument.addPage(page);
-      ContentLayoutData contentLayoutData = contentLayoutDataList.get(index);
-      buildSinglePagePdfDocument(page, contentLayoutData);
-    }
-  }
+	private void buildMultiplePagesPdfDocument() throws IOException {
+		if (contentLayoutDataList != null && contentLayoutDataList.size() > 1) {
+			int pdfPagesSize = pdfPages.size();
+			for (int index = 0; index < pdfPagesSize; index++) {
+				PDPage page = pdfPages.get(index);
+				pdfDocument.addPage(page);
+				buildSinglePagePdfDocument(page, contentLayoutDataList.get(index));
+			}
+		}
+	}
 }

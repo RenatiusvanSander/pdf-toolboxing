@@ -12,13 +12,11 @@ import java.util.Map;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import edu.remad.tutoring2.services.pdf.ContentLayoutData;
 import edu.remad.tutoring2.services.pdf.constants.ContentLayoutDataConstants;
-import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationBuilder;
 import edu.remad.tutoring2.services.pdf.exceptions.PDFComplexInvoiceBuilderException;
 
 public class PDFCreationBuilderExample {
@@ -30,17 +28,18 @@ public class PDFCreationBuilderExample {
 	 * @throws IOException In case of creation of PDF fails.
 	 */
 	public static void main(String[] args) throws IOException {
-		PDPage firstPage = createPage1();
-		PDPage secondPage = createPage2();
+		ContentLayoutData data1 = createPage1();
+		ContentLayoutData data2 = createPage2();
+		List<ContentLayoutData> contentLayoutDatas = new ArrayList<>();
+		contentLayoutDatas.add(data1);
+		contentLayoutDatas.add(data2);
 		
-		PDFCreationBuilder builder = new PDFCreationBuilder();
-		PDDocument document = builder.addPage(firstPage).addPage(secondPage).build();
+		PDFCreationBuilder builder = new PDFCreationBuilder().contentLayoutData(contentLayoutDatas);
+		PDDocument document = builder.build();
 	}
 	
-	private static PDPage createPage1() {
-		try (PDDocument document = new PDDocument()) {
+	private static ContentLayoutData createPage1() {
 			PDPage firstPage = new PDPage(PDRectangle.A4);
-			document.addPage(firstPage);
 
 			ContentLayoutData contentLayout = new ContentLayoutData();
 			contentLayout.setCustomerName("Max", "Mustermann");
@@ -102,24 +101,12 @@ public class PDFCreationBuilderExample {
 							contentLayout.getCustomerName() });
 			contentLayout.getDocumentInformationKeywords();
 			contentLayout.setHasMainContentLayoutData(true);
-
-			PDPageContentStream contentStream = new PDPageContentStream(document, firstPage);
-			SinglePageContentLayouter pageContenLayouter = new SinglePageContentLayouter(document, firstPage,
-					contentLayout, contentStream);
-			pageContenLayouter.build();
-			contentStream.close();
 			
-			return firstPage;
-		} catch (IOException e) {
-			throw new RuntimeException();
-		}
+			return contentLayout;
 	}
 	
-	private static PDPage createPage2() {
-		try (PDDocument document = new PDDocument()) {
+	private static ContentLayoutData createPage2() {
 			PDPage secondPage = new PDPage(PDRectangle.A4);
-			document.addPage(secondPage);
-
 			ContentLayoutData contentLayout = new ContentLayoutData();
 			contentLayout.setCustomerName("Maxim", "Musterfrau");
 			File logo = new File(ContentLayoutDataConstants.LOGO_FILE_PATH);
@@ -180,16 +167,7 @@ public class PDFCreationBuilderExample {
 							contentLayout.getCustomerName() });
 			contentLayout.getDocumentInformationKeywords();
 			contentLayout.setHasMainContentLayoutData(true);
-
-			PDPageContentStream contentStream = new PDPageContentStream(document, secondPage);
-			SinglePageContentLayouter pageContenLayouter = new SinglePageContentLayouter(document, secondPage,
-					contentLayout, contentStream);
-			pageContenLayouter.build();
-			contentStream.close();
 			
-			return secondPage;
-		} catch (IOException e) {
-			throw new RuntimeException();
-		}
+			return contentLayout;
 	}
 }

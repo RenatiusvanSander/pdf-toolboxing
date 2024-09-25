@@ -140,18 +140,6 @@ public class DocumentInformationMultiplePagesBuilder {
 	}
 
 	/**
-	 * Sets keywords
-	 *
-	 * @param keywords string-encoded keywords to set
-	 * @return document information builder
-	 */
-	public DocumentInformationMultiplePagesBuilder setKeywords(String[] keywords) {
-		this.keywords = keywords;
-
-		return this;
-	}
-
-	/**
 	 * Builds the document information
 	 *
 	 * @return PDF document information, {@link PDDocumentInformation}
