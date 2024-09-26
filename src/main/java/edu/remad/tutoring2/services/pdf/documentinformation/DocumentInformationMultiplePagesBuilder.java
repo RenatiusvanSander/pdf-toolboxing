@@ -23,7 +23,7 @@ public class DocumentInformationMultiplePagesBuilder {
 		if (!contentLayoutDatas.isEmpty()) {
 			int size = contentLayoutDatas.size();
 			authors = new String[size];
-			invoiceNumbers = new Long[size];
+			invoiceNumbers = new String[size];
 			creators = new String[size];
 			subjects = new String[size];
 			keywords = new String[size];
@@ -32,7 +32,7 @@ public class DocumentInformationMultiplePagesBuilder {
 		int index = 0;
 		for (ContentLayoutData contentLayoutData : contentLayoutDatas) {
 			authors[index] = contentLayoutData.getContactName();
-			invoiceNumbers[index] = Long.valueOf(contentLayoutData.getInvoiceNo());
+			invoiceNumbers[index] = contentLayoutData.getInvoiceNo();
 			creators[index] = contentLayoutData.getCreator();
 			subjects[index] = contentLayoutData.getSubject();
 			keywords[index] = Arrays.asList(contentLayoutData.getDocumentInformationKeywords()).stream().collect(Collectors.joining(" "));
@@ -43,7 +43,7 @@ public class DocumentInformationMultiplePagesBuilder {
 	/**
 	 * prefix of title
 	 */
-	public static final String INVOICE_TITLE_PREFIX = "Invoice ";
+	public static final String INVOICE_TITLE_PREFIX = "Invoice: ";
 
 	/**
 	 * constant for empty {@link String}
@@ -58,7 +58,7 @@ public class DocumentInformationMultiplePagesBuilder {
 	/**
 	 * invoice number
 	 */
-	private Long[] invoiceNumbers;
+	private String[] invoiceNumbers;
 
 	/**
 	 * creators
@@ -100,7 +100,7 @@ public class DocumentInformationMultiplePagesBuilder {
 	 *
 	 * @return invoice numbers
 	 */
-	public Long[] getInvoiceNumber() {
+	public String[] getInvoiceNumber() {
 		return invoiceNumbers;
 	}
 
@@ -171,14 +171,15 @@ public class DocumentInformationMultiplePagesBuilder {
 				? DocumentInformationUtilities.arrayToString(authors)
 				: this.authors[0]);
 		String invoiceTitle = this.invoiceNumbers != null && this.invoiceNumbers.length > 1
-				? DocumentInformationUtilities.longArrayToJoinedString(invoiceNumbers)
+				? DocumentInformationUtilities.arrayToString(invoiceNumbers).replace("Rechnungsnummer:", "").replace("  ", " ")
 				: String.valueOf(this.invoiceNumbers[0]);
 		documentInformation.setTitle(INVOICE_TITLE_PREFIX + invoiceTitle);
 		documentInformation.setCreator(this.creators != null && this.creators.length > 1
 				? DocumentInformationUtilities.arrayToString(this.creators)
 				: this.creators[0]);
+		String subject = DocumentInformationUtilities.arrayToString(subjects).replace("Rechnungsnummer:", "").replace("Rechnung", "").replace("  ", " ");
 		documentInformation.setSubject(this.subjects != null && this.subjects.length > 1
-				? DocumentInformationUtilities.arrayToString(subjects)
+				? "Rechnungsnummern:" + subject
 				: this.subjects[0]);
 
 		Calendar convertedCreationDate = new GregorianCalendar();

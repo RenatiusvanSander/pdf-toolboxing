@@ -97,6 +97,7 @@ public class PDFCreationBuilder {
    */
   public PDDocument build() throws IOException {
     buildSinglePagePdfDocument();
+    buildMultiplePagesPdfDocument();
 
       for (PDPage page : this.pdfPages) {
         this.pdfDocument.addPage(page);
