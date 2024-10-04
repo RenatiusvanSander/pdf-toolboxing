@@ -14,6 +14,7 @@ import edu.remad.tutoring2.services.pdf.ContentLayoutData;
 
 public class DocumentInformationMultiplePagesBuilder {
 
+	@SuppressWarnings("unused")
 	private List<ContentLayoutData> contentLayoutDatas = new ArrayList<>();
 
 	public void contentLayoutDatas(List<ContentLayoutData> contentLayoutDatas) {
@@ -31,7 +32,7 @@ public class DocumentInformationMultiplePagesBuilder {
 		int index = 0;
 		for (ContentLayoutData contentLayoutData : contentLayoutDatas) {
 			authors[index] = contentLayoutData.getContactName();
-			invoiceNumbers[index] = Long.valueOf(contentLayoutData.getInvoiceNo());
+			invoiceNumbers[index] = Long.valueOf(contentLayoutData.getInvoiceNoWithoutPrefix());
 			creators[index] = contentLayoutData.getCreator();
 			subjects[index] = contentLayoutData.getSubject();
 			keywords[index] = contentLayoutData.getDocumentInformationKeywordByIndex(index);

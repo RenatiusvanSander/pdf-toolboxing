@@ -36,6 +36,10 @@ public class PDFCreationBuilderExample {
 		
 		PDFCreationBuilder builder = new PDFCreationBuilder().contentLayoutData(contentLayoutDatas);
 		PDDocument document = builder.build();
+		document.save("C:\\Users\\remad\\multiple_page_invoice_generated.pdf");
+		
+		byte[] pdfFile = builder.buildAsByteArray();
+		System.out.println(String.format("PDF-File size in bytes is %d", pdfFile.length));
 	}
 	
 	private static ContentLayoutData createPage1() {

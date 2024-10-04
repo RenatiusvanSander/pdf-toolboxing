@@ -1,5 +1,6 @@
 package edu.remad.tutoring2.services.pdf.pagecontent;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +9,13 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
 import edu.remad.tutoring2.services.pdf.ContentLayoutData;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationBuilder;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationMultiplePagesBuilder;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationUtilities;
+import edu.remad.tutoring2.services.pdf.exceptions.PDFCreationBuilderException;
 
 /**
  * A pdf creator written with a builder pattern
@@ -40,6 +43,11 @@ public class PDFCreationBuilder {
 	private final List<ContentLayoutData> contentLayoutDataList;
 
 	/**
+	 * Customized paper format
+	 */
+	private PDRectangle paperFormat;
+
+	/**
 	 * PDFCreationBuilder constructor
 	 */
 	public PDFCreationBuilder() {
@@ -59,7 +67,7 @@ public class PDFCreationBuilder {
 
 		return this;
 	}
-	
+
 	/**
 	 * set content layout data.
 	 * 
@@ -67,7 +75,19 @@ public class PDFCreationBuilder {
 	 */
 	public PDFCreationBuilder contentLayoutData(List<ContentLayoutData> contentLayoutDatas) {
 		this.contentLayoutDataList.addAll(contentLayoutDatas);
-		
+
+		return this;
+	}
+
+	/**
+	 * Sets an customized paper format.
+	 * 
+	 * @param paperFormat {@link PDRectangle}
+	 * @return PDF creation builder
+	 */
+	public PDFCreationBuilder paperFormat(PDRectangle paperFormat) {
+		this.paperFormat = paperFormat;
+
 		return this;
 	}
 
@@ -84,7 +104,7 @@ public class PDFCreationBuilder {
 			builder.contentLayoutDatas(contentLayoutDataList);
 			documentInformation = builder.build();
 		} else {
-			throw new RuntimeException();
+			throw new PDFCreationBuilderException("PDFCreationBuilderException: DocumentInformation was not created.");
 		}
 	}
 
@@ -104,12 +124,18 @@ public class PDFCreationBuilder {
 			return this.pdfDocument;
 		}
 
-		throw new RuntimeException();
+		throw new PDFCreationBuilderException("PDFCreationBuilderException: PDF Document was not build.");
 	}
 
 	private void addEmptyPdfPages() {
-		for (ContentLayoutData contentLayoutData : this.contentLayoutDataList) {
-			pdfPages.add(new PDPage());
+		if (pdfPages.isEmpty()) {
+
+			// default is DIN A4
+			PDRectangle rectangle = paperFormat != null ? paperFormat : PDRectangle.A4;
+
+			for (ContentLayoutData contentLayoutData : this.contentLayoutDataList) {
+				pdfPages.add(new PDPage(rectangle));
+			}
 		}
 	}
 
@@ -121,9 +147,9 @@ public class PDFCreationBuilder {
 	}
 
 	private void buildSinglePagePdfDocument(PDPage pdfPage, ContentLayoutData contentLayoutData) throws IOException {
-		PDPageContentStream pageContentStream = new PDPageContentStream(pdfDocument, pdfPages.get(0));
-		SinglePageContentLayouter contentLayouter = new SinglePageContentLayouter(pdfDocument, pdfPages.get(0),
-				contentLayoutDataList.get(0), pageContentStream);
+		PDPageContentStream pageContentStream = new PDPageContentStream(pdfDocument, pdfPage);
+		SinglePageContentLayouter contentLayouter = new SinglePageContentLayouter(pdfDocument, pdfPage,
+				contentLayoutData, pageContentStream);
 		contentLayouter.build();
 		pageContentStream.close();
 	}
@@ -137,5 +163,24 @@ public class PDFCreationBuilder {
 				buildSinglePagePdfDocument(page, contentLayoutDataList.get(index));
 			}
 		}
+	}
+
+	public byte[] buildAsByteArray() throws IOException {
+		build();
+
+		return writePdfToByteArray();
+	}
+
+	private byte[] writePdfToByteArray() {
+		byte[] pdfFile = null;
+
+		try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+			pdfDocument.save(out);
+			pdfFile = out.toByteArray();
+		} catch (IOException e) {
+			throw new PDFCreationBuilderException("PDFCreationBuilderException: Multi pages PDF not created as bytes.");
+		}
+
+		return pdfFile;
 	}
 }

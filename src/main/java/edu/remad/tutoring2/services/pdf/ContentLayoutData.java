@@ -309,6 +309,10 @@ public class ContentLayoutData {
   public void setInvoiceNo(String invoiceNo) {
     this.invoiceNo = String.format("%s %s", INVOICE_NO_PREFIX, invoiceNo);
   }
+  
+  public String getInvoiceNoWithoutPrefix() {
+	  return invoiceNo != null ?  invoiceNo.replace(INVOICE_NO_PREFIX + " ", "") : "";
+  }
 
   /**
    * Gets invoice creation date

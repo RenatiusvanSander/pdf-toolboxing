@@ -1,6 +1,6 @@
 package edu.remad.tutoring2.services.pdf.exceptions;
 
-public class PDFComplexInvoiceBuilderException extends RuntimeException{
+public class PDFComplexInvoiceBuilderException extends RuntimeException {
 
 	/**
 	 * generated serial version UID
