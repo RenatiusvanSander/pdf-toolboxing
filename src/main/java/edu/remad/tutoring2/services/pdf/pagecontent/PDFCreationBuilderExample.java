@@ -1,7 +1,6 @@
 package edu.remad.tutoring2.services.pdf.pagecontent;
 
 import java.awt.Color;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +16,6 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import edu.remad.tutoring2.services.pdf.ContentLayoutData;
 import edu.remad.tutoring2.services.pdf.constants.ContentLayoutDataConstants;
-import edu.remad.tutoring2.services.pdf.exceptions.PDFComplexInvoiceBuilderException;
 
 public class PDFCreationBuilderExample {
 

@@ -3,6 +3,7 @@ package edu.remad.tutoring2.services.pdf.documentinformation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -18,7 +19,7 @@ public class DocumentInformationMultiplePagesBuilder {
 	private List<ContentLayoutData> contentLayoutDatas = new ArrayList<>();
 
 	public void contentLayoutDatas(List<ContentLayoutData> contentLayoutDatas) {
-		this.contentLayoutDatas = contentLayoutDatas;
+		this.setContentLayoutDatas(contentLayoutDatas);
 
 		if (!contentLayoutDatas.isEmpty()) {
 			int size = contentLayoutDatas.size();
@@ -35,7 +36,7 @@ public class DocumentInformationMultiplePagesBuilder {
 			invoiceNumbers[index] = Long.valueOf(contentLayoutData.getInvoiceNoWithoutPrefix());
 			creators[index] = contentLayoutData.getCreator();
 			subjects[index] = contentLayoutData.getSubject();
-			keywords[index] = contentLayoutData.getDocumentInformationKeywordByIndex(index);
+			keywords[index] = Arrays.asList(contentLayoutData.getDocumentInformationKeywords()).stream().collect(Collectors.joining(" "));
 			index++;
 		}
 	}
@@ -43,7 +44,7 @@ public class DocumentInformationMultiplePagesBuilder {
 	/**
 	 * prefix of title
 	 */
-	public static final String INVOICE_TITLE_PREFIX = "Invoice ";
+	public static final String INVOICE_TITLE_PREFIX = "Invoice: ";
 
 	/**
 	 * constant for empty {@link String}
@@ -141,6 +142,26 @@ public class DocumentInformationMultiplePagesBuilder {
 	}
 
 	/**
+	 * Sets keywords
+	 *
+	 * @param keywords string-encoded keywords to set
+	 * @return document information builder
+	 */
+	public DocumentInformationMultiplePagesBuilder setKeywords(String[] keywords) {
+		this.keywords = keywords;
+
+		return this;
+	}
+
+	public List<ContentLayoutData> getContentLayoutDatas() {
+		return contentLayoutDatas;
+	}
+
+	public void setContentLayoutDatas(List<ContentLayoutData> contentLayoutDatas) {
+		this.contentLayoutDatas = contentLayoutDatas;
+	}
+
+	/**
 	 * Builds the document information
 	 *
 	 * @return PDF document information, {@link PDDocumentInformation}
@@ -148,17 +169,18 @@ public class DocumentInformationMultiplePagesBuilder {
 	public PDDocumentInformation build() {
 		PDDocumentInformation documentInformation = new PDDocumentInformation();
 		documentInformation.setAuthor(this.authors != null && this.authors.length > 1
-				? Arrays.asList(this.authors).stream().collect(Collectors.joining(" "))
+				? DocumentInformationUtilities.arrayToString(authors)
 				: this.authors[0]);
 		String invoiceTitle = this.invoiceNumbers != null && this.invoiceNumbers.length > 1
-				? Arrays.asList(this.invoiceNumbers).stream().map(String::valueOf).collect(Collectors.joining(" "))
+				? DocumentInformationUtilities.longArrayToJoinedString(invoiceNumbers).replace("Rechnungsnummer:", "").replace("  ", " ")
 				: String.valueOf(this.invoiceNumbers[0]);
 		documentInformation.setTitle(INVOICE_TITLE_PREFIX + invoiceTitle);
 		documentInformation.setCreator(this.creators != null && this.creators.length > 1
-				? Arrays.asList(this.creators).stream().collect(Collectors.joining(" "))
+				? DocumentInformationUtilities.arrayToString(this.creators)
 				: this.creators[0]);
+		String subject = DocumentInformationUtilities.arrayToString(subjects).replace("Rechnungsnummer:", "").replace("Rechnung", "").replace("  ", " ");
 		documentInformation.setSubject(this.subjects != null && this.subjects.length > 1
-				? Arrays.asList(this.subjects).stream().collect(Collectors.joining(" "))
+				? "Rechnungsnummern:" + subject
 				: this.subjects[0]);
 
 		Calendar convertedCreationDate = new GregorianCalendar();

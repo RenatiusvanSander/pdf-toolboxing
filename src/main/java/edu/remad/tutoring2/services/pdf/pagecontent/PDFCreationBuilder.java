@@ -43,7 +43,7 @@ public class PDFCreationBuilder {
 	private final List<ContentLayoutData> contentLayoutDataList;
 
 	/**
-	 * Customized paper format
+	 * PDRectangle for example DIN A4, can be set or not.
 	 */
 	private PDRectangle paperFormat;
 
@@ -53,7 +53,19 @@ public class PDFCreationBuilder {
 	public PDFCreationBuilder() {
 		pdfDocument = new PDDocument();
 		pdfPages = new ArrayList<>();
+		documentInformation = new PDDocumentInformation();
 		contentLayoutDataList = new ArrayList<>();
+	}
+
+	/**
+	 * set content layout data.
+	 * 
+	 * @param contentLayoutDatas a list of {@link ContentLayoutData} instances
+	 */
+	public PDFCreationBuilder contentLayoutData(List<ContentLayoutData> contentLayoutDatas) {
+		this.contentLayoutDataList.addAll(contentLayoutDatas);
+
+		return this;
 	}
 
 	/**
@@ -64,17 +76,6 @@ public class PDFCreationBuilder {
 	 */
 	public PDFCreationBuilder addPages(List<PDPage> pages) {
 		this.pdfPages.addAll(pages);
-
-		return this;
-	}
-
-	/**
-	 * set content layout data.
-	 * 
-	 * @param contentLayoutDatas a list of {@link ContentLayoutData} instances
-	 */
-	public PDFCreationBuilder contentLayoutData(List<ContentLayoutData> contentLayoutDatas) {
-		this.contentLayoutDataList.addAll(contentLayoutDatas);
 
 		return this;
 	}
@@ -147,11 +148,11 @@ public class PDFCreationBuilder {
 	}
 
 	private void buildSinglePagePdfDocument(PDPage pdfPage, ContentLayoutData contentLayoutData) throws IOException {
-		PDPageContentStream pageContentStream = new PDPageContentStream(pdfDocument, pdfPage);
-		SinglePageContentLayouter contentLayouter = new SinglePageContentLayouter(pdfDocument, pdfPage,
-				contentLayoutData, pageContentStream);
-		contentLayouter.build();
-		pageContentStream.close();
+		try (PDPageContentStream pageContentStream = new PDPageContentStream(pdfDocument, pdfPage)) {
+			SinglePageContentLayouter contentLayouter = new SinglePageContentLayouter(pdfDocument, pdfPage,
+					contentLayoutData, pageContentStream);
+			contentLayouter.build();
+		}
 	}
 
 	private void buildMultiplePagesPdfDocument() throws IOException {
@@ -166,7 +167,10 @@ public class PDFCreationBuilder {
 	}
 
 	public byte[] buildAsByteArray() throws IOException {
-		build();
+		// check build has already run, zero page means nothing is built.
+		if (pdfDocument.getNumberOfPages() == 0) {
+			build();
+		}
 
 		return writePdfToByteArray();
 	}
