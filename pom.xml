@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.remad</groupId>
 	<artifactId>pdf-toolboxing</artifactId>
-	<version>0.10.1-SNAPSHOT</version>
+	<version>0.30.1-SNAPSHOT</version>
 
 	<properties>
 		<maven.compiler.target>11</maven.compiler.target>

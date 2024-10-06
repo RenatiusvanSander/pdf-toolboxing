@@ -23,7 +23,7 @@ public class DocumentInformationMultiplePagesBuilderTest {
 		assertEquals("Remy Meier Mitarbeiter", documentInformation.getCreator());
 		assertEquals("dgdgd jsjhdhd, lkeuud hhddggd", documentInformation.getKeywords());
 		assertEquals("Rechnungsnummern:  144  147", documentInformation.getSubject());
-		assertEquals("Invoice:  144  147", documentInformation.getTitle());
+		assertEquals("Invoice: 144 147", documentInformation.getTitle());
 	}
 
 	private List<ContentLayoutData> createMultipleContentLayoutDatas() {
