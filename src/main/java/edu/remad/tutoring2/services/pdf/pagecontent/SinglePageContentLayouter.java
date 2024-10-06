@@ -19,28 +19,10 @@ import edu.remad.tutoring2.services.pdf.ContentLayoutData;
 public class SinglePageContentLayouter {
 
 	/**
-	 * height of 45 mm offset to have place for header
-	 */
-	private static final float OFFSET_HEADER = PageContentLayoutUtilities.convertMmToPoint(46.6f);
-
-	/**
-	 * left offset 25mm of page
-	 */
-	private static final float OFFSET_LEFT = PageContentLayoutUtilities.convertMmToPoint(25f);
-
-	/**
-	 * zero offset, means zero points
-	 */
-	private static final float ZERO_OFFSET = 0f;
-
-	/**
-	 * the font size of 12 points
-	 */
-	private static final float FONT_SIZE = 12f;
-	/**
 	 * a blank DIN4 rectangled in-memory-PDF-Document
 	 */
 	private final PDDocument pdfDocument;
+	
 	/**
 	 * PDF page
 	 */
