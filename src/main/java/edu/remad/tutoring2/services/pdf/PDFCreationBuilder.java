@@ -216,7 +216,7 @@ public class PDFCreationBuilder {
 		System.out.println(String.format("PDF-File size in bytes is %d", pdfFile.length));
 	}
 
-	private static ContentLayoutData createPage1() {
+	public static ContentLayoutData createPage1() {
 		PDPage firstPage = new PDPage(PDRectangle.A4);
 
 		ContentLayoutData contentLayout = new ContentLayoutData();
@@ -283,7 +283,7 @@ public class PDFCreationBuilder {
 		return contentLayout;
 	}
 
-	private static ContentLayoutData createPage2() {
+	public static ContentLayoutData createPage2() {
 		PDPage secondPage = new PDPage(PDRectangle.A4);
 		ContentLayoutData contentLayout = new ContentLayoutData();
 		contentLayout.setCustomerName("Maxim", "Musterfrau");
