@@ -21,7 +21,6 @@ import edu.remad.tutoring2.services.pdf.constants.ContentLayoutDataConstants;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationBuilder;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationUtilities;
 import edu.remad.tutoring2.services.pdf.exceptions.PDFComplexInvoiceBuilderException;
-import edu.remad.tutoring2.services.pdf.pagecontent.PDFCreationBuilder;
 import edu.remad.tutoring2.services.pdf.pagecontent.SinglePageContentLayouter;
 import edu.remad.tutoring2.services.pdf.utilities.PdfUtilities;
 
@@ -161,12 +160,7 @@ public class PDFComplexInvoiceBuilder {
 			}
 
 			document.setDocumentInformation(populateDocumentInformationBuilder(contentLayout).build());
-
-			try {
-				document.save(out);
-			} catch (IOException e) {
-				throw new RuntimeException();
-			}
+			document.save(out);
 
 			return out.toByteArray();
 		} catch (PDFComplexInvoiceBuilderException | IOException e) {
