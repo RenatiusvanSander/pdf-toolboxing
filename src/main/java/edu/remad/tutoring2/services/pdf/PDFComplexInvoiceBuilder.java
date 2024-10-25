@@ -160,12 +160,7 @@ public class PDFComplexInvoiceBuilder {
 			}
 
 			document.setDocumentInformation(populateDocumentInformationBuilder(contentLayout).build());
-
-			try {
-				document.save(out);
-			} catch (IOException e) {
-				throw new RuntimeException();
-			}
+			document.save(out);
 
 			return out.toByteArray();
 		} catch (PDFComplexInvoiceBuilderException | IOException e) {
