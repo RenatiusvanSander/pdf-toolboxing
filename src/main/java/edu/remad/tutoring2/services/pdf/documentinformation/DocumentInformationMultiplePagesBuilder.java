@@ -3,7 +3,6 @@ package edu.remad.tutoring2.services.pdf.documentinformation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -18,7 +17,7 @@ public class DocumentInformationMultiplePagesBuilder {
 	@SuppressWarnings("unused")
 	private List<ContentLayoutData> contentLayoutDatas = new ArrayList<>();
 
-	public void contentLayoutDatas(List<ContentLayoutData> contentLayoutDatas) {
+	public DocumentInformationMultiplePagesBuilder contentLayoutDatas(List<ContentLayoutData> contentLayoutDatas) {
 		this.setContentLayoutDatas(contentLayoutDatas);
 
 		if (!contentLayoutDatas.isEmpty()) {
@@ -39,6 +38,8 @@ public class DocumentInformationMultiplePagesBuilder {
 			keywords[index] = Arrays.asList(contentLayoutData.getDocumentInformationKeywords()).stream().collect(Collectors.joining(" "));
 			index++;
 		}
+		
+		return this;
 	}
 
 	/**

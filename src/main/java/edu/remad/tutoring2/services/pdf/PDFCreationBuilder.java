@@ -103,7 +103,7 @@ public class PDFCreationBuilder {
 		if (contentLayoutDataList != null && contentLayoutDataList.size() == 1) {
 			ContentLayoutData contentLayoutData = contentLayoutDataList.get(0);
 			documentInformation = new DocumentInformationBuilder().setAuthor(contentLayoutData.getContactName())
-					.setInvoiceNumber(Long.parseLong(contentLayoutData.getInvoiceNo()))
+					.setInvoiceNumber(Long.parseLong(contentLayoutData.getInvoiceNoWithoutPrefix()))
 					.setCreator(contentLayoutData.getCreator()).setSubject(contentLayoutData.getSubject())
 					.setCreationDate(DocumentInformationUtilities.extractCreationDate(contentLayoutData))
 					.setKeywords(contentLayoutData.getDocumentInformationKeywords()).build();
