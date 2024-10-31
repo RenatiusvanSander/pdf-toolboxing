@@ -41,7 +41,7 @@ public class PDFMergerBuilder {
 			destinationPDDocument = new PDDocument();
 		}
 
-		if (!pdDocuments.isEmpty()) {
+		if (pdDocuments != null && !pdDocuments.isEmpty()) {
 			try {
 				for (PDDocument sourcePDDocument : pdDocuments) {
 					pdfMerger.appendDocument(destinationPDDocument, sourcePDDocument);
@@ -57,21 +57,28 @@ public class PDFMergerBuilder {
 	}
 
 	public PDFMergerBuilder addFile(File pdfFile) {
-		try {
-			pdfMerger.addSource(pdfFile);
-			return this;
-		} catch (FileNotFoundException e) {
-			throw new PDFMergerBuilderException("PDFMergerBuilder: File was not found " + pdfFile.getName() + ".", e);
+		if (pdfFile != null) {
+			try {
+				pdfMerger.addSource(pdfFile);
+				return this;
+			} catch (FileNotFoundException e) {
+				throw new PDFMergerBuilderException("PDFMergerBuilder: File was not found " + pdfFile.getName() + ".",
+						e);
+			}
 		}
+
+		throw new PDFMergerBuilderException("PDFMergerBuilder: File was null.");
 	}
 
 	public PDFMergerBuilder addFiles(List<File> pdfFiles) {
-		if (!pdfFiles.isEmpty()) {
+		if (pdfFiles != null && !pdfFiles.isEmpty()) {
 			try {
 				for (File pdfFile : pdfFiles) {
 					pdfMerger.addSource(pdfFile);
-					return this;
+
 				}
+
+				return this;
 			} catch (FileNotFoundException e) {
 				throw new PDFMergerBuilderException("PDFMergerBuilder: Files were not found.", e);
 			}
@@ -80,9 +87,10 @@ public class PDFMergerBuilder {
 		throw new PDFMergerBuilderException("PDFMergerBuilder: Files to add are zero.");
 	}
 
-	public PDFMergerBuilder addSource(InputStream pdfInputStream) throws FileNotFoundException {
+	public PDFMergerBuilder addSource(InputStream pdfInputStream){
 		if (pdfInputStream != null) {
 			pdfMerger.addSource(pdfInputStream);
+			
 			return this;
 		}
 
@@ -92,7 +100,7 @@ public class PDFMergerBuilder {
 	public PDFMergerBuilder addSources(List<InputStream> pdfInputStreams) {
 		if (pdfInputStreams != null && !pdfInputStreams.isEmpty()) {
 			pdfMerger.addSources(pdfInputStreams);
-			
+
 			return this;
 		}
 
@@ -113,7 +121,7 @@ public class PDFMergerBuilder {
 	}
 
 	public PDFMergerBuilder addStringSources(List<String> sources) {
-		if (sources != null & !sources.isEmpty()) {
+		if (sources != null && !sources.isEmpty()) {
 			try {
 				for (String source : sources) {
 					pdfMerger.addSource(source);
@@ -128,7 +136,7 @@ public class PDFMergerBuilder {
 		throw new PDFMergerBuilderException("PDFMergerBuilder: sources is null or empty.");
 	}
 
-	public PDFMergerBuilder DestinationPDDocumentInformation(PDDocumentInformation info) {
+	public PDFMergerBuilder destinationPDDocumentInformation(PDDocumentInformation info) {
 		if (info != null) {
 			pdfMerger.setDestinationDocumentInformation(info);
 			return this;
@@ -137,56 +145,57 @@ public class PDFMergerBuilder {
 		throw new PDFMergerBuilderException("PDFMergerBuilder: info was null.");
 	}
 
-	public PDFMergerBuilder DestinationFileName(String destinationFileName) {
+	public PDFMergerBuilder destinationFileName(String destinationFileName) {
 		if (StringUtils.isNotBlank(destinationFileName) && pdfMerger.getDestinationStream() == null) {
 			pdfMerger.setDestinationFileName(destinationFileName);
 			return this;
 		}
+
 		throw new PDFMergerBuilderException(
 				"PDFMergerBuilder: destination file name was null or blank or destination output stream was already set.");
 	}
 
-	public PDFMergerBuilder PDMetaData(PDMetadata metaData) {
+	public PDFMergerBuilder pDMetaData(PDMetadata metaData) {
 		if (metaData != null) {
 			pdfMerger.setDestinationMetadata(metaData);
 			return this;
-		} else {
-			throw new PDFMergerBuilderException("PDFMergerBuilder: meta data was null.");
 		}
+
+		throw new PDFMergerBuilderException("PDFMergerBuilder: meta data was null.");
 	}
 
-	public PDFMergerBuilder DestinationStream(OutputStream destinationStream) {
-		if (destinationStream == null && pdfMerger.getDestinationStream() == null) {
+	public PDFMergerBuilder destinationStream(OutputStream destinationStream) {
+		if (destinationStream != null && pdfMerger.getDestinationFileName() == null) {
 			pdfMerger.setDestinationStream(destinationStream);
 			return this;
-		} else {
-			throw new PDFMergerBuilderException(
-					"PDFMergerBuilder: destination stream was null or destination file was already set.");
 		}
+
+		throw new PDFMergerBuilderException(
+				"PDFMergerBuilder: destination stream was null or destination file was already set.");
 	}
 
-	public PDFMergerBuilder DocumentMergeMode(DocumentMergeMode mode) {
+	public PDFMergerBuilder documentMergeMode(DocumentMergeMode mode) {
 		if (mode != null) {
 			pdfMerger.setDocumentMergeMode(mode);
 			return this;
-		} else {
-			throw new PDFMergerBuilderException("PDFMergerBuilder: mode was null.");
 		}
+
+		throw new PDFMergerBuilderException("PDFMergerBuilder: mode was null.");
 	}
 
 	public PDFMergerBuilder customizedMemoryUsageSetting(MemoryUsageSetting memoryUsageSetting) {
 		if (memoryUsageSetting != null) {
 			this.memoryUsageSetting = memoryUsageSetting;
 			return this;
-		} else {
-			throw new PDFMergerBuilderException("PDFMergerBuilder: memoryUsageSetting was null.");
 		}
+
+		throw new PDFMergerBuilderException("PDFMergerBuilder: memoryUsageSetting was null.");
 	}
 
 	public void build() {
 		if (pdfMerger.getDestinationFileName() == null && pdfMerger.getDestinationStream() == null) {
 			throw new PDFMergerBuilderException(
-					"PDFMergerBuilder: neither destination file name nor destination stream is ste. Have no destination to write merged PDFs to.");
+					"PDFMergerBuilder: Neither destination file name nor destination stream are set. Have no destination to write merged PDFs to.");
 		}
 
 		try {
