@@ -24,7 +24,7 @@ import edu.remad.tutoring2.services.pdf.PDFCreationBuilder;
 import edu.remad.tutoring2.services.pdf.constants.MemoryUsageSettingConstants;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationMultiplePagesBuilder;
 
-public class PdfFileMergerExample {
+public class PDFMergerExample {
 
 	public static void main(String[] args) throws IOException {
 		mergeTwoInputStreamsAsPDF();

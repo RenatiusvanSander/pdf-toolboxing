@@ -2,6 +2,7 @@ package edu.remad.tutoring2.services.pdf.utilities;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import edu.remad.tutoring2.appconstants.TimeAppConstants;
@@ -24,7 +26,7 @@ public class PdfUtilities {
 
 	private PdfUtilities() {
 	}
-	
+
 	public static ContentLayoutData createContentLayoutData2(InvoiceEntity invoice) {
 		try {
 			UserEntity user = invoice.getInvoiceUser();
@@ -42,7 +44,8 @@ public class PdfUtilities {
 			contentLayoutData.setContactCompany(ContentLayoutDataConstants.CONTACT_COMPANY);
 			contentLayoutData.setContactName(ContentLayoutDataConstants.CONTACT_NAME);
 			contentLayoutData.setContactStreetHouseNo(ContentLayoutDataConstants.CONTACT_STREET_HOUSE_NO);
-			contentLayoutData.setContactZipAndLocation(ContentLayoutDataConstants.CONTACT_ZIP + " " + ContentLayoutDataConstants.CONTACT_LOCATION);
+			contentLayoutData.setContactZipAndLocation(
+					ContentLayoutDataConstants.CONTACT_ZIP + " " + ContentLayoutDataConstants.CONTACT_LOCATION);
 			contentLayoutData.setContactMobile(ContentLayoutDataConstants.CONTACT_MOBILE);
 			contentLayoutData.setContactEmail(ContentLayoutDataConstants.CONTACT_EMAIL);
 			contentLayoutData.setInvoiceNo(String.valueOf(invoice.getInvoiceNo()));
@@ -71,17 +74,18 @@ public class PdfUtilities {
 			contentLayoutData.setTableCellHeight(ContentLayoutDataConstants.TABLE_CELL_HEIGHT);
 			contentLayoutData.setTableHeaders(ContentLayoutDataConstants.TABLE_HEADERS);
 			contentLayoutData.setTableRows(createTableRows(invoice));
-			contentLayoutData.setPageWidth((int)ContentLayoutDataConstants.PAGE.getTrimBox().getWidth());
-			contentLayoutData.setPageHeight((int)ContentLayoutDataConstants.PAGE.getTrimBox().getHeight());
+			contentLayoutData.setPageWidth((int) ContentLayoutDataConstants.PAGE.getTrimBox().getWidth());
+			contentLayoutData.setPageHeight((int) ContentLayoutDataConstants.PAGE.getTrimBox().getHeight());
 			contentLayoutData.setInvoiceNoLabel(ContentLayoutDataConstants.INVOICE_NO_LABEL);
 			contentLayoutData.setInvoiceDateLabel(ContentLayoutDataConstants.INVOICE_DATE_LABEL);
 			contentLayoutData.setInvoicePerformanceDateLabel(ContentLayoutDataConstants.INVOICE_PERFORMANCE_DATE_LABEL);
-			contentLayoutData.setValueAddedTaxDisclaimerText(
-					ContentLayoutDataConstants.VALUE_ADDED_TAX_DISCLAIMER_TEXT);
+			contentLayoutData
+					.setValueAddedTaxDisclaimerText(ContentLayoutDataConstants.VALUE_ADDED_TAX_DISCLAIMER_TEXT);
 			contentLayoutData.setDocumentInformationCreator(ContentLayoutDataConstants.DOCUMENT_INFORMATION_CREATOR);
 			contentLayoutData.getDocumentInformationCreator();
 			contentLayoutData.setDocumentInformationKeywords(
-					new String[] { ContentLayoutDataConstants.DOCUMENT_INFORMATION_KEYWORD_INVOICE, String.valueOf(invoice.getInvoiceNo()), contentLayoutData.getCustomerName() });
+					new String[] { ContentLayoutDataConstants.DOCUMENT_INFORMATION_KEYWORD_INVOICE,
+							String.valueOf(invoice.getInvoiceNo()), contentLayoutData.getCustomerName() });
 			contentLayoutData.setHasMainContentLayoutData(true);
 			contentLayoutData.setSplitDelimiter("\\.");
 
@@ -107,7 +111,7 @@ public class PdfUtilities {
 
 		return tableRows;
 	}
-	
+
 	public static List<Map<String, String>> createTableRows(InvoiceEntity invoice) {
 		BigDecimal price = invoice.getPrice().getPrice().setScale(2, RoundingMode.HALF_UP);
 		List<Map<String, String>> tableRows = new ArrayList<>();
@@ -130,14 +134,22 @@ public class PdfUtilities {
 	public static File createCustomLogo() {
 		return new File(ContentLayoutDataConstants.LOGO_FILE_PATH);
 	}
-	
+
 	public static List<ContentLayoutData> createContentLayoutDatas(List<InvoiceEntity> invoices) {
 		List<ContentLayoutData> contentLayoutDatas = new ArrayList<>();
-		
-		for(InvoiceEntity invoice : invoices) {
+
+		for (InvoiceEntity invoice : invoices) {
 			contentLayoutDatas.add(createContentLayoutData2(invoice));
 		}
-		
+
 		return contentLayoutDatas;
+	}
+
+	public static PDDocument pdfByteArrayToPDDocument(byte[] pdfByteArray) {
+		try {
+			return PDDocument.load(pdfByteArray);
+		} catch (IOException e) {
+			throw new PdfUtilitiesException("PdfUtilities: PDF ByteArray was not converted to PDDocument.", e);
+		}
 	}
 }
