@@ -166,6 +166,7 @@ public class PDFMergerBuilder {
 
 	public PDFMergerBuilder destinationStream(OutputStream destinationStream) {
 		if (destinationStream != null && pdfMerger.getDestinationFileName() == null) {
+			
 			pdfMerger.setDestinationStream(destinationStream);
 			return this;
 		}
@@ -200,7 +201,6 @@ public class PDFMergerBuilder {
 
 		try {
 			if (memoryUsageSetting != null) {
-
 				pdfMerger.mergeDocuments(memoryUsageSetting);
 			} else {
 				pdfMerger.mergeDocuments(

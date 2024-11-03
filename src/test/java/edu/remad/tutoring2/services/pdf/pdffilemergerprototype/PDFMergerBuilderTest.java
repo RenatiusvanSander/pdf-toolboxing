@@ -2,10 +2,23 @@ package edu.remad.tutoring2.services.pdf.pdffilemergerprototype;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import edu.remad.tutoring2.services.pdf.ContentLayoutData;
+import edu.remad.tutoring2.services.pdf.PDFCreationBuilder;
+import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationBuilder;
 import edu.remad.tutoring2.services.pdf.exceptions.PDFMergerBuilderException;
 
 public class PDFMergerBuilderTest {
@@ -88,5 +101,33 @@ public class PDFMergerBuilderTest {
 		});
 		assertEquals("PDFMergerBuilder: destination stream was null or destination file was already set.",
 				exception.getMessage());
+	}
+
+	@Test
+	public void buildTest() throws IOException {
+		List<ContentLayoutData> contentLayoutData1 = List.of(PDFCreationBuilder.createPage1());
+		PDFCreationBuilder builder1 = new PDFCreationBuilder().contentLayoutData(contentLayoutData1);
+		byte[] firstPdfFile = builder1.buildAsByteArray();
+		InputStream firstFile = new ByteArrayInputStream(firstPdfFile);
+
+		List<ContentLayoutData> contentLayoutData2 = List.of(PDFCreationBuilder.createPage2());
+		PDFCreationBuilder builder2 = new PDFCreationBuilder().contentLayoutData(contentLayoutData2);
+		byte[] secondPdfFile = builder2.buildAsByteArray();
+		InputStream secondFile = new ByteArrayInputStream(secondPdfFile);
+
+		ByteArrayOutputStream destinationStream = new ByteArrayOutputStream();
+		Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+		PDDocumentInformation documentInformation = new DocumentInformationBuilder().setAuthor("Rémy Meier")
+				.setInvoiceNumber(151L).setCreator("Tutoring2").setSubject("Merged PDF Invoices")
+				.setKeywords(new String[] { "Invoice1", "Invoice2" }).setCreationDate(date).build();
+
+		builder.addSource(firstFile);
+		builder.addSources(List.of(secondFile));
+		builder.destinationStream(destinationStream);
+		builder.destinationPDDocumentInformation(documentInformation);
+		builder.build();
+
+		byte[] mergedPdfFile = destinationStream.toByteArray();
+		assertEquals(11163, mergedPdfFile.length);
 	}
 }
