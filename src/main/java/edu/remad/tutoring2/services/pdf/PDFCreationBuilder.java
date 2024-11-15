@@ -53,6 +53,12 @@ public class PDFCreationBuilder {
 	 * PDRectangle for example DIN A4, can be set or not.
 	 */
 	private PDRectangle paperFormat;
+	
+	/** is tp rroduce a XRechnung xml-file and to append */
+	private boolean isXRechnung;
+	
+	/** secure PDF with a password */
+	private boolean isSecuredWithPassord;
 
 	/**
 	 * PDFCreationBuilder constructor
@@ -62,6 +68,7 @@ public class PDFCreationBuilder {
 		pdfPages = new ArrayList<>();
 		documentInformation = new PDDocumentInformation();
 		contentLayoutDataList = new ArrayList<>();
+		isXRechnung = false; // by default false
 	}
 
 	/**
@@ -96,6 +103,30 @@ public class PDFCreationBuilder {
 	public PDFCreationBuilder paperFormat(PDRectangle paperFormat) {
 		this.paperFormat = paperFormat;
 
+		return this;
+	}
+	
+	/**
+	 * Enables an XRechnung xml-file is attached to created PDF.
+	 * 
+	 * @param isXRechnung {@code true} produces an XREchnung and attaches to PDF
+	 * @return {@link PDFCreationBuilder}
+	 */
+	public PDFCreationBuilder XRechnung(boolean isXRechnung) {
+		this.isXRechnung = isXRechnung;
+		
+		return this;
+	}
+	
+	/**
+	 * Enables a password protected PDF. Password is user password.
+	 * 
+	 * @param isSecuredWithPassord {@code true} secure PDF with user's password.
+	 * @return {@link PDFCreationBuilder}
+	 */
+	public PDFCreationBuilder SecureWithPassord(boolean isSecuredWithPassord) {
+		this.isSecuredWithPassord = isSecuredWithPassord;
+		
 		return this;
 	}
 
@@ -171,6 +202,10 @@ public class PDFCreationBuilder {
 				buildSinglePagePdfDocument(page, contentLayoutDataList.get(index));
 			}
 		}
+	}
+	
+	private byte[] produceXRechnungasByteArray() {
+		
 	}
 
 	public byte[] buildAsByteArray() throws IOException {
