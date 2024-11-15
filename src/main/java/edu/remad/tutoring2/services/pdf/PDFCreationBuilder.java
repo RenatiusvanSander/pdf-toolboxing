@@ -205,7 +205,7 @@ public class PDFCreationBuilder {
 	}
 	
 	private byte[] produceXRechnungasByteArray() {
-		
+		return new byte[0];
 	}
 
 	public byte[] buildAsByteArray() throws IOException {
