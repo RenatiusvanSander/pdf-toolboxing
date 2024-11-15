@@ -2,19 +2,27 @@ package edu.remad.tutoring2.services.pdf.pdf3a;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.GregorianCalendar;
 
+import org.apache.jempbox.xmp.XMPMetadata;
+import org.apache.jempbox.xmp.XMPSchemaBasic;
+import org.apache.jempbox.xmp.XMPSchemaDublinCore;
+import org.apache.jempbox.xmp.pdfa.XMPSchemaPDFAId;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDMetadata;
+import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDMarkInfo;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.color.PDOutputIntent;
 
 import edu.remad.tutoring2.services.pdf.constants.ContentLayoutDataConstants;
 
 public class PDF3ABuilder {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		try(PDDocument document = new PDDocument()) {
 			PDPage pageA4 = ContentLayoutDataConstants.PAGE;
 			document.addPage(pageA4);
@@ -22,7 +30,7 @@ public class PDF3ABuilder {
 			 // create a page with the message where needed
 		      PDPageContentStream contentStream = new PDPageContentStream(document, pageA4);
 		      contentStream.beginText();
-//		      contentStream.setFont(PDTy);
+		      contentStream.setFont(PDType1Font.TIMES_ROMAN, 12f);
 		      contentStream.moveTextPositionByAmount(100, 700);
 		      contentStream.drawString("hhhhhhh");
 		      contentStream.endText();
@@ -30,9 +38,36 @@ public class PDF3ABuilder {
 		      contentStream.close();
 		      
 		      PDMetadata metaData = new PDMetadata(document);
-		      PDDocumentCatalog cat = document.getDocumentCatalog();
-		      cat.setMetadata(metaData);
+		      PDDocumentCatalog catalog = document.getDocumentCatalog();
+		      catalog.setMetadata(metaData);
 		      
+		      XMPMetadata xmpMeta = new XMPMetadata();
+		      XMPSchemaPDFAId pdfaid = new XMPSchemaPDFAId(xmpMeta);
+		      xmpMeta.addSchema(pdfaid);
+		      
+		      XMPSchemaDublinCore dublinCore = xmpMeta.addDublinCoreSchema();
+		      dublinCore.addCreator("fff");
+		      dublinCore.setAbout("ddd");
+		      
+		      XMPSchemaBasic xmpSchemaBasic = xmpMeta.addBasicSchema();
+		      xmpSchemaBasic.setAbout("");
+		      xmpSchemaBasic.setCreatorTool("Tutoring");
+		      xmpSchemaBasic.setCreateDate(GregorianCalendar.getInstance());
+		      
+		      PDDocumentInformation docuemntInformation = new PDDocumentInformation();
+		      docuemntInformation.setProducer("Remy");
+		      docuemntInformation.setAuthor("meier");
+		      document.setDocumentInformation(docuemntInformation);
+		      
+		      PDMarkInfo markinfo = new PDMarkInfo();
+		      markinfo.setMarked(true);
+		      document.getDocumentCatalog().setMarkInfo(markinfo);
+
+		      pdfaid.setPart(3);
+		      pdfaid.setConformance("A");
+		      pdfaid.setAbout("");
+		      
+		      metaData.importXMPMetadata(xmpMeta.asByteArray());
 		      
 		      InputStream colorProfileRgbV4IccPreference = PDF3ABuilder.class.getResourceAsStream("/colorprofiles/sRGB_v4_ICC_preference.icc");
 		      
