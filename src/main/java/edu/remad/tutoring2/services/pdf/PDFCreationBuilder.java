@@ -16,6 +16,8 @@ import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
+import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import edu.remad.mustangxrechnungproducer.XRechnungXmlProducer;
@@ -141,12 +143,22 @@ public class PDFCreationBuilder {
 	 * Enables a password protected PDF. Password is user password.
 	 * 
 	 * @param isSecuredWithPassord {@code true} secure PDF with user's password.
+	 * @param invoiceData          data of invoice. May be null, when
+	 *                             {@link PDFCreationBuilder#XRechnung(boolean, Properties, InvoiceEntity)}
+	 *                             already used.
 	 * @return {@link PDFCreationBuilder}
 	 */
-	public PDFCreationBuilder SecureWithPassord(boolean isSecuredWithPassord) {
+	public PDFCreationBuilder secureWithPassord(boolean isSecuredWithPassord, InvoiceEntity invoiceData) {
 		this.isSecuredWithPassord = isSecuredWithPassord;
-
-		return this;
+		if (this.invoiceData == null && invoiceData != null) {
+			this.invoiceData = invoiceData;
+			return this;
+		} else if (this.invoiceData != null && invoiceData == null) {
+			return this;
+		} else {
+			throw new PDFCreationBuilderException(
+					"PDFCreationBuilderException: secure a PDF with password needs invoiceData.");
+		}
 	}
 
 	private void createDocumentInformation() {
@@ -210,6 +222,36 @@ public class PDFCreationBuilder {
 					contentLayoutData, pageContentStream);
 			contentLayouter.build();
 			produceAndAttachXRechnungFile(contentLayoutData);
+			if (pdfPages.size() == 1) {
+				protectDocumentWithPassword();
+			}
+		}
+	}
+
+	private void protectDocumentWithPassword() {
+		if (isSecuredWithPassord && invoiceData != null) {
+			try {
+				AccessPermission accessPermission = new AccessPermission();
+				accessPermission.canPrint();
+				accessPermission.setCanModify(false);
+				accessPermission.setCanModifyAnnotations(false);
+				accessPermission.setCanFillInForm(false);
+				accessPermission.setCanExtractForAccessibility(false);
+				accessPermission.setCanExtractContent(false);
+				accessPermission.setCanAssembleDocument(false);
+				accessPermission.setCanPrintDegraded(false);
+				String password = invoiceData.getInvoiceUser().getPassword();
+				StandardProtectionPolicy standardProtectionPolicy = new StandardProtectionPolicy(password, password,
+						accessPermission);
+				standardProtectionPolicy.setEncryptionKeyLength(256);
+
+				pdfDocument.protect(standardProtectionPolicy);
+			} catch (IOException e) {
+				throw new PDFCreationBuilderException(
+						"PDFCreationBuilderException: Cannot protect document with password. Reason is "
+								+ e.getMessage(),
+						e);
+			}
 		}
 	}
 
@@ -223,6 +265,10 @@ public class PDFCreationBuilder {
 				buildSinglePagePdfDocument(page, contentLayoutData);
 				produceAndAttachXRechnungFile(contentLayoutData);
 			}
+			
+			if(pdfPagesSize > 1) {
+				protectDocumentWithPassword();
+			}
 		}
 	}
 
@@ -235,7 +281,8 @@ public class PDFCreationBuilder {
 
 	private void attachXRechnungXmlFile(byte[] xRechnungFile, ContentLayoutData contentLayoutData) {
 		if (xRechnungFile != null && xRechnungFile.length > 0) {
-			PDF3AFileAttachmentBuilder builder = new PDF3AFileAttachmentBuilder(pdfDocument).contentLayoutData(contentLayoutData).xRechnungByteArray(xRechnungFile);
+			PDF3AFileAttachmentBuilder builder = new PDF3AFileAttachmentBuilder(pdfDocument)
+					.contentLayoutData(contentLayoutData).xRechnungByteArray(xRechnungFile);
 			builder.build();
 		}
 	}
