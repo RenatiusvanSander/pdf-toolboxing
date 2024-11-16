@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
@@ -56,6 +57,8 @@ public class PDFCreationBuilder {
 	
 	/** is tp rroduce a XRechnung xml-file and to append */
 	private boolean isXRechnung;
+	
+	private Properties customProperties;
 	
 	/** secure PDF with a password */
 	private boolean isSecuredWithPassord;
@@ -110,10 +113,12 @@ public class PDFCreationBuilder {
 	 * Enables an XRechnung xml-file is attached to created PDF.
 	 * 
 	 * @param isXRechnung {@code true} produces an XREchnung and attaches to PDF
+	 * @param customProperties customized Properties for XRechnung. May be {@code null}
 	 * @return {@link PDFCreationBuilder}
 	 */
-	public PDFCreationBuilder XRechnung(boolean isXRechnung) {
+	public PDFCreationBuilder XRechnung(boolean isXRechnung, Properties customProperties) {
 		this.isXRechnung = isXRechnung;
+		this.customProperties = customProperties;
 		
 		return this;
 	}
