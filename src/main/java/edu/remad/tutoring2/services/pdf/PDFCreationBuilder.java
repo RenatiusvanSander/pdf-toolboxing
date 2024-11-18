@@ -153,7 +153,7 @@ public class PDFCreationBuilder {
 		if (this.invoiceData == null && invoiceData != null) {
 			this.invoiceData = invoiceData;
 			return this;
-		} else if (this.invoiceData != null && invoiceData == null) {
+		} else if (this.invoiceData != null && (invoiceData == null || invoiceData != null)) {
 			return this;
 		} else {
 			throw new PDFCreationBuilderException(

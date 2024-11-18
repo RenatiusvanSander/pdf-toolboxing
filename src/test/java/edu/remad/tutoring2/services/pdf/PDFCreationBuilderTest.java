@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import edu.remad.mustangxrechnungproducer.XRechnungXmlProducer;
 import edu.remad.mustangxrechnungproducer.utilities.XRechnungXmlProducerUtilities;
 import edu.remad.tutoring2.models.AddressEntity;
 import edu.remad.tutoring2.models.InvoiceEntity;
@@ -49,15 +48,15 @@ public class PDFCreationBuilderTest {
 		builder.contentLayoutData(List.of(contentLayoutData));
 
 		byte[] actualPdf = builder.buildAsByteArray();
-		
+
 		assertNotNull(actualPdf);
 	}
-	
+
 	@Test
 	public void createPDF3AWithXRechnungTest() throws IOException {
 		PDFCreationBuilder builder = new PDFCreationBuilder();
 		builder.contentLayoutData(List.of(contentLayoutData));
-		
+
 		UserEntity mockedUser = mock(UserEntity.class);
 		AddressEntity mockedAddress = mock(AddressEntity.class);
 		List<AddressEntity> addresses = List.of(mockedAddress);
@@ -65,7 +64,7 @@ public class PDFCreationBuilderTest {
 		ServiceContractEntity mockedServiceContract = mock(ServiceContractEntity.class);
 		PriceEntity mockedPrice = mock(PriceEntity.class);
 		LocalDateTime invoiceCreationDate = LocalDateTime.of(2024, 3, 14, 10, 0);
-InvoiceEntity invoiceMock = mock(InvoiceEntity.class);
+		InvoiceEntity invoiceMock = mock(InvoiceEntity.class);
 
 		when(invoiceMock.getInvoiceUser()).thenReturn(mockedUser);
 		when(mockedUser.getAddresses()).thenReturn(addresses);
@@ -84,13 +83,50 @@ InvoiceEntity invoiceMock = mock(InvoiceEntity.class);
 		when(mockedPrice.getPrice()).thenReturn(new BigDecimal(13));
 		when(invoiceMock.getInvoiceCreationDate()).thenReturn(invoiceCreationDate);
 		when(invoiceMock.getInvoiceNo()).thenReturn(156L);
-		
-		
+
 		builder.XRechnung(true, XRechnungXmlProducerUtilities.ceateJUnitTestProperties(), invoiceMock);
-		
-		
+
 		byte[] actualPdf = builder.buildAsByteArray();
-		
+		assertNotNull(actualPdf);
+	}
+	
+	@Test
+	public void createPDF3AWithXRechnungAndPasswordProtectionTest() throws IOException {
+		PDFCreationBuilder builder = new PDFCreationBuilder();
+		builder.contentLayoutData(List.of(contentLayoutData));
+
+		UserEntity mockedUser = mock(UserEntity.class);
+		AddressEntity mockedAddress = mock(AddressEntity.class);
+		List<AddressEntity> addresses = List.of(mockedAddress);
+		ZipCodeEntity mockedZipCode = mock(ZipCodeEntity.class);
+		ServiceContractEntity mockedServiceContract = mock(ServiceContractEntity.class);
+		PriceEntity mockedPrice = mock(PriceEntity.class);
+		LocalDateTime invoiceCreationDate = LocalDateTime.of(2024, 3, 14, 10, 0);
+		InvoiceEntity invoiceMock = mock(InvoiceEntity.class);
+
+		when(invoiceMock.getInvoiceUser()).thenReturn(mockedUser);
+		when(mockedUser.getAddresses()).thenReturn(addresses);
+		when(mockedAddress.getAddressZipCode()).thenReturn(mockedZipCode);
+		when(mockedUser.getFirstName()).thenReturn("John");
+		when(mockedUser.getLastName()).thenReturn("Doe");
+		when(mockedAddress.getAddressStreet()).thenReturn("ExampleStreet");
+		when(mockedAddress.getAddressHouseNo()).thenReturn("12");
+		when(mockedZipCode.getZipCode()).thenReturn("22359");
+		when(mockedZipCode.getZipCodeLocation()).thenReturn("Hamburg");
+		when(mockedUser.getEmail()).thenReturn("example@openweb.info");
+		when(invoiceMock.getInvoiceServiceContract()).thenReturn(mockedServiceContract);
+		when(mockedServiceContract.getServiceContractName()).thenReturn("Elektrotechnik");
+		when(mockedServiceContract.getServiceContractDescription()).thenReturn("Explanation ipsum");
+		when(invoiceMock.getPrice()).thenReturn(mockedPrice);
+		when(mockedPrice.getPrice()).thenReturn(new BigDecimal(13));
+		when(invoiceMock.getInvoiceCreationDate()).thenReturn(invoiceCreationDate);
+		when(invoiceMock.getInvoiceNo()).thenReturn(156L);
+		when(mockedUser.getPassword()).thenReturn("12345678");
+
+		builder.XRechnung(true, XRechnungXmlProducerUtilities.ceateJUnitTestProperties(), invoiceMock);
+		builder.secureWithPassord(true, invoiceMock);
+
+		byte[] actualPdf = builder.buildAsByteArray();
 		assertNotNull(actualPdf);
 	}
 
