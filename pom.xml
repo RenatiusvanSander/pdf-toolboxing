@@ -12,8 +12,6 @@
 		<maven.compiler.version>3.13.0</maven.compiler.version>
 		<maven.jar.version>3.4.1</maven.jar.version>
 		<encoding>UTF-8</encoding>
-		<junit5.version>5.10.0</junit5.version>
-		<library.author>ReMad</library.author>
 	</properties>
 	
 		<dependencyManagement>
