@@ -1,4 +1,4 @@
-package edu.remad.tutoring2.services.pdf.pdffilemergerprototype;
+package edu.remad.tutoring2.services.pdf.samples;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -21,10 +21,10 @@ import org.apache.pdfbox.pdmodel.common.PDMetadata;
 
 import edu.remad.tutoring2.services.pdf.ContentLayoutData;
 import edu.remad.tutoring2.services.pdf.PDFCreationBuilder;
-import edu.remad.tutoring2.services.pdf.constants.MemoryUsageSettingConstants;
+import edu.remad.tutoring2.services.pdf.constants.MaxMainMemoryBytes;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationMultiplePagesBuilder;
 
-public class PDFMergerExample {
+public class PDFMergerSample {
 
 	public static void main(String[] args) throws IOException {
 		mergeTwoInputStreamsAsPDF();
@@ -46,7 +46,7 @@ public class PDFMergerExample {
 		pdfMerge2.addSources(List.of(new FileInputStream(pdf_1), new FileInputStream(pdf_2)));
 		pdfMerge2.appendDocument(document_destination, document_source);
 		pdfMerge2.appendDocument(document_destination, document_source_2);
-		pdfMerge2.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly(MemoryUsageSettingConstants.CONSTANT_256_MB_MEMORY));
+		pdfMerge2.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly(MaxMainMemoryBytes.CONSTANT_256_MB_MEMORY.getMaxMainMemory()));
 	}
 
 	private static void mergeTwoPdfFilesWithMetaDataToFile() throws IOException, FileNotFoundException {

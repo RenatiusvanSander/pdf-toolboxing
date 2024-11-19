@@ -107,13 +107,11 @@ public class PDFMergerBuilderTest {
 	public void buildTest() throws IOException {
 		List<ContentLayoutData> contentLayoutData1 = List.of(PDFCreationBuilder.createPage1());
 		PDFCreationBuilder builder1 = new PDFCreationBuilder().contentLayoutData(contentLayoutData1);
-		byte[] firstPdfFile = builder1.buildAsByteArray();
-		InputStream firstFile = new ByteArrayInputStream(firstPdfFile);
+		InputStream firstFile = new ByteArrayInputStream(builder1.buildAsByteArray());
 
 		List<ContentLayoutData> contentLayoutData2 = List.of(PDFCreationBuilder.createPage2());
 		PDFCreationBuilder builder2 = new PDFCreationBuilder().contentLayoutData(contentLayoutData2);
-		byte[] secondPdfFile = builder2.buildAsByteArray();
-		InputStream secondFile = new ByteArrayInputStream(secondPdfFile);
+		InputStream secondFile = new ByteArrayInputStream(builder2.buildAsByteArray());
 
 		ByteArrayOutputStream destinationStream = new ByteArrayOutputStream();
 		Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
