@@ -79,6 +79,7 @@ public class PDFCreationBuilder {
 		documentInformation = new PDDocumentInformation();
 		contentLayoutDataList = new ArrayList<>();
 		isXRechnung = false; // by default false
+		isSecuredWithPassord = false; // by default false
 	}
 
 	/**

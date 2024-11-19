@@ -1,4 +1,4 @@
-package edu.remad.tutoring2.services.pdf.pdf3a;
+package edu.remad.tutoring2.services.pdf.samples;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +20,11 @@ import org.apache.pdfbox.pdmodel.graphics.color.PDOutputIntent;
 
 import edu.remad.tutoring2.services.pdf.constants.ContentLayoutDataConstants;
 
-public class PDF3ABuilder {
+public final class PDF3ASample {
+	
+	private PDF3ASample() {
+		// do not instantiate
+	}
 
 	public static void main(String[] args) throws Exception {
 		try(PDDocument document = new PDDocument()) {
@@ -69,7 +73,7 @@ public class PDF3ABuilder {
 		      
 		      metaData.importXMPMetadata(xmpMeta.asByteArray());
 		      
-		      InputStream colorProfileRgbV4IccPreference = PDF3ABuilder.class.getResourceAsStream("/colorprofiles/sRGB_v4_ICC_preference.icc");
+		      InputStream colorProfileRgbV4IccPreference = PDF3ASample.class.getResourceAsStream("/colorprofiles/sRGB_v4_ICC_preference.icc");
 		      
 		      PDOutputIntent outputIntent = new PDOutputIntent(document, colorProfileRgbV4IccPreference);
 		      outputIntent.setInfo("sRGB v4 Preference");
@@ -82,4 +86,5 @@ public class PDF3ABuilder {
 			e.printStackTrace();
 		}
 	}
+	
 }

@@ -1,4 +1,4 @@
-package edu.remad.tutoring2.services.pdf.pdf3a;
+package edu.remad.tutoring2.services.pdf.samples;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -31,7 +31,11 @@ import org.apache.pdfbox.pdmodel.graphics.color.PDOutputIntent;
 
 import edu.remad.tutoring2.services.pdf.constants.ContentLayoutDataConstants;
 
-public class PDF3AWithPasswordFileAttachmentBuilder {
+public final class PDF3AWithPasswordFileAttachmentSample {
+	
+	private PDF3AWithPasswordFileAttachmentSample() {
+		// do not instantiate
+	}
 
 	public static void main(String[] args) throws Exception {
 		try (PDDocument document = new PDDocument()) {
@@ -80,7 +84,7 @@ public class PDF3AWithPasswordFileAttachmentBuilder {
 
 			metaData.importXMPMetadata(xmpMeta.asByteArray());
 
-			InputStream colorProfileRgbV4IccPreference = PDF3ABuilder.class
+			InputStream colorProfileRgbV4IccPreference = PDF3AWithPasswordFileAttachmentSample.class
 					.getResourceAsStream("/colorprofiles/sRGB_v4_ICC_preference.icc");
 
 			PDOutputIntent outputIntent = new PDOutputIntent(document, colorProfileRgbV4IccPreference);
