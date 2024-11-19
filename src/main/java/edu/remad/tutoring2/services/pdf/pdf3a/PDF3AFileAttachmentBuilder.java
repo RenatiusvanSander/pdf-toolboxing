@@ -35,9 +35,6 @@ public class PDF3AFileAttachmentBuilder {
 
 	private byte[] xRechnungData;
 
-	private static final InputStream COLOR_PROFILE_RGB_V4_ICC_PREFERENCE = PDF3AFileAttachmentBuilder.class
-			.getResourceAsStream("/colorprofiles/sRGB_v4_ICC_preference.icc");
-
 	private static final String S_RGB_V4_PREFERENCE = "sRGB v4 Preference";
 
 	/**
@@ -152,7 +149,8 @@ public class PDF3AFileAttachmentBuilder {
 	}
 
 	private void createPDOutputIntent() throws IOException {
-		PDOutputIntent outputIntent = new PDOutputIntent(document, COLOR_PROFILE_RGB_V4_ICC_PREFERENCE);
+		PDOutputIntent outputIntent = new PDOutputIntent(document, PDF3AFileAttachmentBuilder.class
+				.getResourceAsStream("/colorprofiles/sRGB_v4_ICC_preference.icc"));
 		outputIntent.setInfo(S_RGB_V4_PREFERENCE);
 		outputIntent.setOutputCondition(S_RGB_V4_PREFERENCE);
 		outputIntent.setOutputConditionIdentifier(S_RGB_V4_PREFERENCE);

@@ -154,7 +154,7 @@ public class PDFCreationBuilder {
 		if (this.invoiceData == null && invoiceData != null) {
 			this.invoiceData = invoiceData;
 			return this;
-		} else if (this.invoiceData != null && invoiceData == null) {
+		} else if (this.invoiceData != null && (invoiceData == null || invoiceData != null)) {
 			return this;
 		} else {
 			throw new PDFCreationBuilderException(
@@ -166,7 +166,7 @@ public class PDFCreationBuilder {
 		if (contentLayoutDataList != null && contentLayoutDataList.size() == 1) {
 			ContentLayoutData contentLayoutData = contentLayoutDataList.get(0);
 			documentInformation = new DocumentInformationBuilder().setAuthor(contentLayoutData.getContactName())
-					.setInvoiceNumber(Long.parseLong(contentLayoutData.getInvoiceNo()))
+					.setInvoiceNumber(Long.parseLong(contentLayoutData.getInvoiceNoWithoutPrefix()))
 					.setCreator(contentLayoutData.getCreator()).setSubject(contentLayoutData.getSubject())
 					.setCreationDate(DocumentInformationUtilities.extractCreationDate(contentLayoutData))
 					.setKeywords(contentLayoutData.getDocumentInformationKeywords()).build();
