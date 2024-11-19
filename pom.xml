@@ -12,11 +12,44 @@
 		<maven.compiler.version>3.13.0</maven.compiler.version>
 		<maven.jar.version>3.4.1</maven.jar.version>
 		<encoding>UTF-8</encoding>
-		<junit5.version>5.10.0</junit5.version>
-		<library.author>ReMad</library.author>
 	</properties>
+	
+		<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>5.11.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Optionally: parameterized tests support -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<version>5.14.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest</artifactId>
+			<version>3.0</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
@@ -52,6 +85,11 @@
 		<!-- own implementations -->
 		<dependency>
 			<groupId>edu.remad</groupId>
+			<artifactId>mustang-xrechnung-producer</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.remad</groupId>
 			<artifactId>tutoring2-models</artifactId>
 			<version>1.0.4-SNAPSHOT</version>
 		</dependency>
@@ -78,7 +116,8 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>edu.remad.tutoring2.services.pdf.PDFComplexInvoiceBuilder</mainClass>
+							<mainClass>
+								edu.remad.tutoring2.services.pdf.PDFCreationBuilder</mainClass>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 						</manifest>
