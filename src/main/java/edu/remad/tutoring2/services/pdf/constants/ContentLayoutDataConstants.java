@@ -17,7 +17,8 @@ public class ContentLayoutDataConstants {
 	private ContentLayoutDataConstants() {
 	}
 
-	public static final String LOGO_FILE_PATH = "/img/logo.png";
+	// unix and windows are different
+	public static final String LOGO_FILE_PATH = "img/logo.png";
 
 	public static final PDType1Font FONT = PDType1Font.HELVETICA;
 

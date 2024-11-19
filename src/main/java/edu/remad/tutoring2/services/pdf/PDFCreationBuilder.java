@@ -9,20 +9,26 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
+import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import edu.remad.mustangxrechnungproducer.XRechnungXmlProducer;
+import edu.remad.tutoring2.models.InvoiceEntity;
 import edu.remad.tutoring2.services.pdf.constants.ContentLayoutDataConstants;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationBuilder;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationMultiplePagesBuilder;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationUtilities;
 import edu.remad.tutoring2.services.pdf.exceptions.PDFCreationBuilderException;
 import edu.remad.tutoring2.services.pdf.pagecontent.SinglePageContentLayouter;
+import edu.remad.tutoring2.services.pdf.pdf3a.PDF3AFileAttachmentBuilder;
 
 /**
  * A pdf creator written with a builder pattern
@@ -54,6 +60,16 @@ public class PDFCreationBuilder {
 	 */
 	private PDRectangle paperFormat;
 
+	/** produce a XRechnung xml-file and to append */
+	private boolean isXRechnung;
+
+	private Properties customProperties;
+
+	/** secure PDF with a password */
+	private boolean isSecuredWithPassord;
+
+	private InvoiceEntity invoiceData;
+
 	/**
 	 * PDFCreationBuilder constructor
 	 */
@@ -62,6 +78,8 @@ public class PDFCreationBuilder {
 		pdfPages = new ArrayList<>();
 		documentInformation = new PDDocumentInformation();
 		contentLayoutDataList = new ArrayList<>();
+		isXRechnung = false; // by default false
+		isSecuredWithPassord = false; // by default false
 	}
 
 	/**
@@ -97,6 +115,51 @@ public class PDFCreationBuilder {
 		this.paperFormat = paperFormat;
 
 		return this;
+	}
+
+	/**
+	 * Enables an XRechnung xml-file is attached to created PDF.
+	 * 
+	 * @param isXRechnung      {@code true} produces an XREchnung and attaches to
+	 *                         PDF
+	 * @param customProperties customized Properties for XRechnung.
+	 * @para
+	 * @return {@link PDFCreationBuilder}
+	 */
+	public PDFCreationBuilder XRechnung(boolean isXRechnung, Properties customProperties, InvoiceEntity invoiceData) {
+		this.isXRechnung = isXRechnung;
+
+		if (customProperties == null || invoiceData == null) {
+			throw new PDFCreationBuilderException(
+					"PDFCreationBuilderException: customProperties or invoiceData cannot be null.");
+		}
+
+		this.customProperties = customProperties;
+		this.invoiceData = invoiceData;
+
+		return this;
+	}
+
+	/**
+	 * Enables a password protected PDF. Password is user password.
+	 * 
+	 * @param isSecuredWithPassord {@code true} secure PDF with user's password.
+	 * @param invoiceData          data of invoice. May be null, when
+	 *                             {@link PDFCreationBuilder#XRechnung(boolean, Properties, InvoiceEntity)}
+	 *                             already used.
+	 * @return {@link PDFCreationBuilder}
+	 */
+	public PDFCreationBuilder secureWithPassord(boolean isSecuredWithPassord, InvoiceEntity invoiceData) {
+		this.isSecuredWithPassord = isSecuredWithPassord;
+		if (this.invoiceData == null && invoiceData != null) {
+			this.invoiceData = invoiceData;
+			return this;
+		} else if (this.invoiceData != null && (invoiceData == null || invoiceData != null)) {
+			return this;
+		} else {
+			throw new PDFCreationBuilderException(
+					"PDFCreationBuilderException: secure a PDF with password needs invoiceData.");
+		}
 	}
 
 	private void createDocumentInformation() {
@@ -159,6 +222,37 @@ public class PDFCreationBuilder {
 			SinglePageContentLayouter contentLayouter = new SinglePageContentLayouter(pdfDocument, pdfPage,
 					contentLayoutData, pageContentStream);
 			contentLayouter.build();
+			produceAndAttachXRechnungFile(contentLayoutData);
+			if (pdfPages.size() == 1) {
+				protectDocumentWithPassword();
+			}
+		}
+	}
+
+	private void protectDocumentWithPassword() {
+		if (isSecuredWithPassord && invoiceData != null) {
+			try {
+				AccessPermission accessPermission = new AccessPermission();
+				accessPermission.canPrint();
+				accessPermission.setCanModify(false);
+				accessPermission.setCanModifyAnnotations(false);
+				accessPermission.setCanFillInForm(false);
+				accessPermission.setCanExtractForAccessibility(false);
+				accessPermission.setCanExtractContent(false);
+				accessPermission.setCanAssembleDocument(false);
+				accessPermission.setCanPrintDegraded(false);
+				String password = invoiceData.getInvoiceUser().getPassword();
+				StandardProtectionPolicy standardProtectionPolicy = new StandardProtectionPolicy(password, password,
+						accessPermission);
+				standardProtectionPolicy.setEncryptionKeyLength(256);
+
+				pdfDocument.protect(standardProtectionPolicy);
+			} catch (IOException e) {
+				throw new PDFCreationBuilderException(
+						"PDFCreationBuilderException: Cannot protect document with password. Reason is "
+								+ e.getMessage(),
+						e);
+			}
 		}
 	}
 
@@ -168,8 +262,29 @@ public class PDFCreationBuilder {
 			for (int index = 0; index < pdfPagesSize; index++) {
 				PDPage page = pdfPages.get(index);
 				pdfDocument.addPage(page);
-				buildSinglePagePdfDocument(page, contentLayoutDataList.get(index));
+				ContentLayoutData contentLayoutData = contentLayoutDataList.get(index);
+				buildSinglePagePdfDocument(page, contentLayoutData);
+				produceAndAttachXRechnungFile(contentLayoutData);
 			}
+			
+			if(pdfPagesSize > 1) {
+				protectDocumentWithPassword();
+			}
+		}
+	}
+
+	private void produceAndAttachXRechnungFile(ContentLayoutData contentLayoutData) {
+		if (isXRechnung) {
+			byte[] xRechnungFile = new XRechnungXmlProducer(invoiceData, customProperties).produceXmlByteArray();
+			attachXRechnungXmlFile(xRechnungFile, contentLayoutData);
+		}
+	}
+
+	private void attachXRechnungXmlFile(byte[] xRechnungFile, ContentLayoutData contentLayoutData) {
+		if (xRechnungFile != null && xRechnungFile.length > 0) {
+			PDF3AFileAttachmentBuilder builder = new PDF3AFileAttachmentBuilder(pdfDocument)
+					.contentLayoutData(contentLayoutData).xRechnungByteArray(xRechnungFile);
+			builder.build();
 		}
 	}
 
