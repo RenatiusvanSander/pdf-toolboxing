@@ -20,6 +20,7 @@ import edu.remad.tutoring2.services.pdf.ContentLayoutData;
 import edu.remad.tutoring2.services.pdf.PDFCreationBuilder;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationBuilder;
 import edu.remad.tutoring2.services.pdf.exceptions.PDFMergerBuilderException;
+import edu.remad.tutoring2.services.pdf.pdffilemerger.PDFMergerBuilder;
 
 public class PDFMergerBuilderTest {
 

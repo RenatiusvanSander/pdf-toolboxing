@@ -30,6 +30,12 @@ public final class PdfUtilities {
 		// do not instantiate
 	}
 
+	/**
+	 * Creates from invoice an {@link ContentLayoutData}
+	 * 
+	 * @param invoice invoice as {@link InvoiceEntity}
+	 * @return {@link ContentLayoutData}
+	 */
 	public static ContentLayoutData createContentLayoutData2(InvoiceEntity invoice) {
 		try {
 			UserEntity user = invoice.getInvoiceUser();
@@ -94,11 +100,17 @@ public final class PdfUtilities {
 
 			return contentLayoutData;
 		} catch (RuntimeException e) {
-			String message = "PdfUtilities: Error while creating ContentLayoutData";
-			throw new PdfUtilitiesException(message, e);
+			throw new PdfUtilitiesException("PdfUtilities: Error while creating ContentLayoutData.", e);
 		}
 	}
 
+	/**
+	 * Create table rows
+	 * 
+	 * @param tutoringAppointment object of {@link TutoringAppointmentEntity}
+	 * @param invoice invoice data as {@link InvoiceEntity}
+	 * @return table rows
+	 */
 	public static List<Map<String, String>> createTableRows(TutoringAppointmentEntity tutoringAppointment,
 			InvoiceEntity invoice) {
 		BigDecimal price = invoice.getPrice().getPrice().setScale(2, RoundingMode.HALF_UP);
@@ -115,6 +127,12 @@ public final class PdfUtilities {
 		return tableRows;
 	}
 
+	/**
+	 * Create table rows
+	 * 
+	 * @param invoice invoice data as {@link InvoiceEntity}
+	 * @return table rows
+	 */
 	public static List<Map<String, String>> createTableRows(InvoiceEntity invoice) {
 		BigDecimal price = invoice.getPrice().getPrice().setScale(2, RoundingMode.HALF_UP);
 		List<Map<String, String>> tableRows = new ArrayList<>();
@@ -130,12 +148,32 @@ public final class PdfUtilities {
 		return tableRows;
 	}
 
+	/**
+	 * Creates custom logo file
+	 * 
+	 * @return {@link File}
+	 */
 	public static File createLogo() {
-		return new File("img/logo.png");
+		return new File(ContentLayoutDataConstants.LOGO_FILE_PATH);
 	}
 
+	/**
+	 * Creates custom logo file
+	 * 
+	 * @return {@link File}
+	 */
 	public static File createCustomLogo() {
 		return new File(ContentLayoutDataConstants.LOGO_FILE_PATH);
+	}
+	
+	/**
+	 * Creates custom logo file
+	 * 
+	 * @param filePath string encoded full file path
+	 * @return {@link File}
+	 */
+	public static File createCustomLogo(String filePath) {
+		return new File(filePath);
 	}
 
 	public static List<ContentLayoutData> createContentLayoutDatas(List<InvoiceEntity> invoices) {
@@ -148,6 +186,12 @@ public final class PdfUtilities {
 		return contentLayoutDatas;
 	}
 
+	/**
+	 * Loads PDF ByteArray To PDDocument
+	 * 
+	 * @param pdfByteArray array of bytes
+	 * @return {@link PDDocument}
+	 */
 	public static PDDocument pdfByteArrayToPDDocument(byte[] pdfByteArray) {
 		try {
 			return PDDocument.load(pdfByteArray);
@@ -156,6 +200,12 @@ public final class PdfUtilities {
 		}
 	}
 	
+	/**
+	 * populate DocumentInformationBuilder
+	 * 
+	 * @param contentLayout {@link ContentLayoutData}
+	 * @return {@link DocumentInformationBuilder}
+	 */
 	public static DocumentInformationBuilder populateDocumentInformationBuilder(ContentLayoutData contentLayout) {
 		DocumentInformationBuilder builder = new DocumentInformationBuilder();
 		builder.setAuthor(contentLayout.getContactName());

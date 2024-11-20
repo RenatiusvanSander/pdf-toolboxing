@@ -7,17 +7,16 @@ import java.util.List;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.w3c.dom.css.Rect;
 
-public class ContentLayoutDataConstants {
+public final class ContentLayoutDataConstants {
 
 	/**
 	 * private Constructor do not initialize instance.
 	 */
 	private ContentLayoutDataConstants() {
+		// do not instantiate
 	}
 
-	// unix and windows are different
 	public static final String LOGO_FILE_PATH = "img/logo.png";
 
 	public static final PDType1Font FONT = PDType1Font.HELVETICA;

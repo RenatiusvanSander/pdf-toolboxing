@@ -1,4 +1,4 @@
-package edu.remad.tutoring2.services.pdf.pdffilemergerprototype;
+package edu.remad.tutoring2.services.pdf.pdffilemerger;
 
 import java.io.File;
 import java.io.FileNotFoundException;

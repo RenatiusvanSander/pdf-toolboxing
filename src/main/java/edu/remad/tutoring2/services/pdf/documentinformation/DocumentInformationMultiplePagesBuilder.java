@@ -14,33 +14,10 @@ import edu.remad.tutoring2.services.pdf.ContentLayoutData;
 
 public class DocumentInformationMultiplePagesBuilder {
 
-	@SuppressWarnings("unused")
+	/**
+	 * content layout datas
+	 */
 	private List<ContentLayoutData> contentLayoutDatas = new ArrayList<>();
-
-	public DocumentInformationMultiplePagesBuilder contentLayoutDatas(List<ContentLayoutData> contentLayoutDatas) {
-		this.setContentLayoutDatas(contentLayoutDatas);
-
-		if (!contentLayoutDatas.isEmpty()) {
-			int size = contentLayoutDatas.size();
-			authors = new String[size];
-			invoiceNumbers = new Long[size];
-			creators = new String[size];
-			subjects = new String[size];
-			keywords = new String[size];
-		}
-
-		int index = 0;
-		for (ContentLayoutData contentLayoutData : contentLayoutDatas) {
-			authors[index] = contentLayoutData.getContactName();
-			invoiceNumbers[index] = Long.valueOf(contentLayoutData.getInvoiceNoWithoutPrefix());
-			creators[index] = contentLayoutData.getCreator();
-			subjects[index] = contentLayoutData.getSubject();
-			keywords[index] = Arrays.asList(contentLayoutData.getDocumentInformationKeywords()).stream().collect(Collectors.joining(" "));
-			index++;
-		}
-		
-		return this;
-	}
 
 	/**
 	 * prefix of title
@@ -86,6 +63,37 @@ public class DocumentInformationMultiplePagesBuilder {
 	 * DocumentInformationBuilder Constructor
 	 */
 	public DocumentInformationMultiplePagesBuilder() {
+	}
+	
+	/**
+	 * Sets contentLayoutDatas
+	 * 
+	 * @param contentLayoutDatas contentLayoutDatas
+	 * @return {@link DocumentInformationMultiplePagesBuilder}
+	 */
+	public DocumentInformationMultiplePagesBuilder contentLayoutDatas(List<ContentLayoutData> contentLayoutDatas) {
+		this.setContentLayoutDatas(contentLayoutDatas);
+
+		if (!contentLayoutDatas.isEmpty()) {
+			int size = contentLayoutDatas.size();
+			authors = new String[size];
+			invoiceNumbers = new Long[size];
+			creators = new String[size];
+			subjects = new String[size];
+			keywords = new String[size];
+		}
+
+		int index = 0;
+		for (ContentLayoutData contentLayoutData : contentLayoutDatas) {
+			authors[index] = contentLayoutData.getContactName();
+			invoiceNumbers[index] = Long.valueOf(contentLayoutData.getInvoiceNoWithoutPrefix());
+			creators[index] = contentLayoutData.getCreator();
+			subjects[index] = contentLayoutData.getSubject();
+			keywords[index] = Arrays.asList(contentLayoutData.getDocumentInformationKeywords()).stream().collect(Collectors.joining(" "));
+			index++;
+		}
+		
+		return this;
 	}
 
 	/**
@@ -154,10 +162,20 @@ public class DocumentInformationMultiplePagesBuilder {
 		return this;
 	}
 
+	/**
+	 * Gets ContentLayoutDatas
+	 * 
+	 * @return list of {@link ContentLayoutData}
+	 */
 	public List<ContentLayoutData> getContentLayoutDatas() {
 		return contentLayoutDatas;
 	}
 
+	/**
+	 * Sets {@link ContentLayoutData}s
+	 * 
+	 * @param contentLayoutDatas a list of content layout datas
+	 */
 	public void setContentLayoutDatas(List<ContentLayoutData> contentLayoutDatas) {
 		this.contentLayoutDatas = contentLayoutDatas;
 	}
