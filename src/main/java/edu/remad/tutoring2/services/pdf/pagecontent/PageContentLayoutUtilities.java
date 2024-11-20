@@ -20,7 +20,7 @@ public class PageContentLayoutUtilities {
 	  }
 
 	  /**
-	   * Converts point to milimetres
+	   * Converts point to millimeters
 	   *
 	   * @param point 1 pt = 1/72 inch = 25.4/72 mm
 	   * @return converted point value as milimetres
@@ -32,8 +32,8 @@ public class PageContentLayoutUtilities {
 	  /**
 	   * Converts mm to points.
 	   *
-	   * @param mm milimetres to convert into points
-	   * @return converted milimtres values as points
+	   * @param mm millimeters to convert into points
+	   * @return converted millimeters values as points
 	   */
 	  public static float convertMmToPoint(final float mm) {
 	    return mm * POINTS_CONSTANT;

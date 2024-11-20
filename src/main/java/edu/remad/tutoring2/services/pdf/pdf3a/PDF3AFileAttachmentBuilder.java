@@ -68,6 +68,7 @@ public class PDF3AFileAttachmentBuilder {
 	}
 	
 	/**
+	 * XRechnung byte array
 	 * 
 	 * @param xRechnungData XRechnung data file as byte array
 	 * @return {@link PDF3AFileAttachmentBuilder}

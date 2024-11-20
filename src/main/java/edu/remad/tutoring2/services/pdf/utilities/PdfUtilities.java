@@ -20,11 +20,14 @@ import edu.remad.tutoring2.models.TutoringAppointmentEntity;
 import edu.remad.tutoring2.models.UserEntity;
 import edu.remad.tutoring2.services.pdf.ContentLayoutData;
 import edu.remad.tutoring2.services.pdf.constants.ContentLayoutDataConstants;
+import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationBuilder;
+import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationUtilities;
 import edu.remad.tutoring2.services.pdf.exceptions.PdfUtilitiesException;
 
-public class PdfUtilities {
+public final class PdfUtilities {
 
 	private PdfUtilities() {
+		// do not instantiate
 	}
 
 	public static ContentLayoutData createContentLayoutData2(InvoiceEntity invoice) {
@@ -151,5 +154,17 @@ public class PdfUtilities {
 		} catch (IOException e) {
 			throw new PdfUtilitiesException("PdfUtilities: PDF ByteArray was not converted to PDDocument.", e);
 		}
+	}
+	
+	public static DocumentInformationBuilder populateDocumentInformationBuilder(ContentLayoutData contentLayout) {
+		DocumentInformationBuilder builder = new DocumentInformationBuilder();
+		builder.setAuthor(contentLayout.getContactName());
+		builder.setInvoiceNumber(Long.getLong(contentLayout.getInvoiceNo()));
+		builder.setCreator(contentLayout.getCreator());
+		builder.setSubject(contentLayout.getInvoiceNoLabel() + " " + contentLayout.getInvoiceNo());
+		builder.setCreationDate(DocumentInformationUtilities.extractCreationDate(contentLayout));
+		builder.setKeywords(contentLayout.getDocumentInformationKeywords());
+
+		return builder;
 	}
 }
