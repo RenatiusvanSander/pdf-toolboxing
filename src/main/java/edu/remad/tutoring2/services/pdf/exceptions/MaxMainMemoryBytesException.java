@@ -5,7 +5,7 @@ public class MaxMainMemoryBytesException extends RuntimeException {
 	private static final long serialVersionUID = -9021952377790852335L;
 
 	/**
-	 * Creates instance of {@link message}
+	 * Creates instance of {@link MaxMainMemoryBytesException}
 	 * 
 	 * @param message error message
 	 */

@@ -19,12 +19,21 @@ public class PDFComplexInvoiceBuilder {
 
 	private PDDocument pdfDoucment;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param invoice invoice to produce PDF
+	 * @return {@link PDFComplexInvoiceBuilder}
+	 */
 	public PDFComplexInvoiceBuilder invoice(InvoiceEntity invoice) {
 		this.invoice = invoice;
 
 		return this;
 	}
 
+	/**
+	 * @return byte array of invoice PDF
+	 */
 	public byte[] build() {
 		return buildDocument(PdfUtilities.createContentLayoutData2(invoice));
 	}
@@ -56,6 +65,9 @@ public class PDFComplexInvoiceBuilder {
 		}
 	}
 
+	/**
+	 * @return {@link PDPage}
+	 */
 	public PDPage buildPage() {
 		try (PDDocument document = new PDDocument()) {
 			ContentLayoutData contentLayout = PdfUtilities.createContentLayoutData2(invoice);
