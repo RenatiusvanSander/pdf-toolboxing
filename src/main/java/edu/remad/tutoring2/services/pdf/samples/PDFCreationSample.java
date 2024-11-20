@@ -1,120 +1,47 @@
-package edu.remad.tutoring2.services.pdf;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+package edu.remad.tutoring2.services.pdf.samples;
 
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import edu.remad.mustangxrechnungproducer.utilities.XRechnungXmlProducerUtilities;
-import edu.remad.tutoring2.models.AddressEntity;
-import edu.remad.tutoring2.models.InvoiceEntity;
-import edu.remad.tutoring2.models.PriceEntity;
-import edu.remad.tutoring2.models.ServiceContractEntity;
-import edu.remad.tutoring2.models.UserEntity;
-import edu.remad.tutoring2.models.ZipCodeEntity;
+import edu.remad.tutoring2.services.pdf.ContentLayoutData;
+import edu.remad.tutoring2.services.pdf.PDFCreationBuilder;
 import edu.remad.tutoring2.services.pdf.constants.ContentLayoutDataConstants;
 
-@ExtendWith(MockitoExtension.class)
-public class PDFCreationBuilderTest {
+public class PDFCreationSample {
 
-	private ContentLayoutData contentLayoutData;
+	/**
+	 * Runs creation of complex invoice
+	 *
+	 * @param args arguments from environment
+	 * @throws IOException In case of creation of PDF fails.
+	 */
+	public static void main(String[] args) throws IOException {
+		ContentLayoutData data1 = createPage1();
+		ContentLayoutData data2 = createPage2();
+		List<ContentLayoutData> contentLayoutDatas = new ArrayList<>();
+		contentLayoutDatas.add(data1);
+		contentLayoutDatas.add(data2);
 
-	@BeforeEach
-	public void setUp() {
-		contentLayoutData = createPage1();
+		PDFCreationBuilder builder = new PDFCreationBuilder().contentLayoutData(contentLayoutDatas);
+		PDDocument document = builder.build();
+		document.save("C:\\Users\\remad\\multiple_page_invoice_generated.pdf");
+
+		byte[] pdfFile = builder.buildAsByteArray();
+		System.out.println(String.format("PDF-File size in bytes is %d", pdfFile.length));
 	}
 
-	@Test
-	public void createDefaultPDFTest() throws IOException {
-		PDFCreationBuilder builder = new PDFCreationBuilder();
-		builder.contentLayoutData(List.of(contentLayoutData));
-
-		byte[] actualPdf = builder.buildAsByteArray();
-
-		assertNotNull(actualPdf);
-	}
-
-	@Test
-	public void createPDF3AWithXRechnungTest() throws IOException {
-		PDFCreationBuilder builder = new PDFCreationBuilder();
-		builder.contentLayoutData(List.of(contentLayoutData));
-
-		InvoiceEntity invoiceMock = mock(InvoiceEntity.class);
-		runMocks(null, invoiceMock);
-
-		builder.XRechnung(XRechnungXmlProducerUtilities.ceateJUnitTestProperties(), invoiceMock);
-
-		byte[] actualPdf = builder.buildAsByteArray();
-		assertNotNull(actualPdf);
-	}
-	
-	@Test
-	public void createPDF3AWithXRechnungAndPasswordProtectionTest() throws IOException {
-		PDFCreationBuilder builder = new PDFCreationBuilder();
-		builder.contentLayoutData(List.of(contentLayoutData));
-		UserEntity mockedUser = mock(UserEntity.class);
-		InvoiceEntity invoiceMock = mock(InvoiceEntity.class);
-
-		runMocks(mockedUser, invoiceMock);
-		when(mockedUser.getPassword()).thenReturn("12345678");
-
-		builder.XRechnung(XRechnungXmlProducerUtilities.ceateJUnitTestProperties(), invoiceMock);
-		builder.secureWithPassord(invoiceMock);
-
-		byte[] actualPdf = builder.buildAsByteArray();
-		assertNotNull(actualPdf);
-	}
-	
-	private void runMocks(UserEntity mockedUser, InvoiceEntity invoiceMock) {
-		
-		if(mockedUser == null) {
-			mockedUser = mock(UserEntity.class);
-		}
-		AddressEntity mockedAddress = mock(AddressEntity.class);
-		List<AddressEntity> addresses = List.of(mockedAddress);
-		ZipCodeEntity mockedZipCode = mock(ZipCodeEntity.class);
-		ServiceContractEntity mockedServiceContract = mock(ServiceContractEntity.class);
-		PriceEntity mockedPrice = mock(PriceEntity.class);
-		LocalDateTime invoiceCreationDate = LocalDateTime.of(2024, 3, 14, 10, 0);
-		
-		when(invoiceMock.getInvoiceUser()).thenReturn(mockedUser);
-		when(mockedUser.getAddresses()).thenReturn(addresses);
-		when(mockedAddress.getAddressZipCode()).thenReturn(mockedZipCode);
-		when(mockedUser.getFirstName()).thenReturn("John");
-		when(mockedUser.getLastName()).thenReturn("Doe");
-		when(mockedAddress.getAddressStreet()).thenReturn("ExampleStreet");
-		when(mockedAddress.getAddressHouseNo()).thenReturn("12");
-		when(mockedZipCode.getZipCode()).thenReturn("22359");
-		when(mockedZipCode.getZipCodeLocation()).thenReturn("Hamburg");
-		when(mockedUser.getEmail()).thenReturn("example@openweb.info");
-		when(invoiceMock.getInvoiceServiceContract()).thenReturn(mockedServiceContract);
-		when(mockedServiceContract.getServiceContractName()).thenReturn("Elektrotechnik");
-		when(mockedServiceContract.getServiceContractDescription()).thenReturn("Explanation ipsum");
-		when(invoiceMock.getPrice()).thenReturn(mockedPrice);
-		when(mockedPrice.getPrice()).thenReturn(new BigDecimal(13));
-		when(invoiceMock.getInvoiceCreationDate()).thenReturn(invoiceCreationDate);
-		when(invoiceMock.getInvoiceNo()).thenReturn(156L);
-	}
-
-	private static ContentLayoutData createPage1() {
+	public static ContentLayoutData createPage1() {
 		PDPage firstPage = new PDPage(PDRectangle.A4);
 
 		ContentLayoutData contentLayout = new ContentLayoutData();
@@ -181,7 +108,7 @@ public class PDFCreationBuilderTest {
 		return contentLayout;
 	}
 
-	private static ContentLayoutData createPage2() {
+	public static ContentLayoutData createPage2() {
 		PDPage secondPage = new PDPage(PDRectangle.A4);
 		ContentLayoutData contentLayout = new ContentLayoutData();
 		contentLayout.setCustomerName("Maxim", "Musterfrau");

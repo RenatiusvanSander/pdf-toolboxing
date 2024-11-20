@@ -64,12 +64,12 @@ public class PDFMergerSample {
 	}
 
 	private static void mergeTwoInputStreamsAsPDF() throws IOException, FileNotFoundException {
-		List<ContentLayoutData> contentLayoutData1 = List.of(PDFCreationBuilder.createPage1());
+		List<ContentLayoutData> contentLayoutData1 = List.of(PDFCreationSample.createPage1());
 		PDFCreationBuilder builder1 = new PDFCreationBuilder().contentLayoutData(contentLayoutData1);
 		byte[] firstPdfFile = builder1.buildAsByteArray();
 		InputStream firstFile = new ByteArrayInputStream(firstPdfFile);
 
-		List<ContentLayoutData> contentLayoutData2 = List.of(PDFCreationBuilder.createPage2());
+		List<ContentLayoutData> contentLayoutData2 = List.of(PDFCreationSample.createPage2());
 		PDFCreationBuilder builder2 = new PDFCreationBuilder().contentLayoutData(contentLayoutData2);
 		byte[] secondPdfFile = builder2.buildAsByteArray();
 		InputStream secondFile = new ByteArrayInputStream(secondPdfFile);

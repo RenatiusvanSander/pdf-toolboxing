@@ -6,6 +6,8 @@ import java.util.GregorianCalendar;
 
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 
+import edu.remad.tutoring2.services.pdf.utilities.DocumentInformationUtilities;
+
 /**
  * builder for {@link PDDocumentInformation}
  */

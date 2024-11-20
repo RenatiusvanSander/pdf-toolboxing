@@ -10,25 +10,13 @@ import java.util.Map;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
+import edu.remad.tutoring2.services.pdf.constants.ContentLayoutDataConstants;
+
 /**
  * Layouts the content
  */
 public class ContentLayoutData {
 
-	/**
-	 * prefix of invoice creation date
-	 */
-	public static final String INVOICE_CREATION_DATE_PREFIX = "Rechnungsdatum: ";
-
-	public static final String TUTORING_APPOINTMENT_PREFIX = "Nachhilfe am:";
-	/**
-	 * prefix of invoice number
-	 */
-	private static final String INVOICE_NO_PREFIX = "Rechnungsnummer: ";
-	/**
-	 * prefix of full name
-	 */
-	private static final String NAME_PREFIX = "Frau / Herrn ";
 	/**
 	 * full customer's name
 	 */
@@ -151,7 +139,7 @@ public class ContentLayoutData {
 	 * @param lastName  customer's last name
 	 */
 	public void setCustomerName(String firstName, String lastName) {
-		this.customerName = String.format("%s %s %s", NAME_PREFIX, firstName, lastName);
+		this.customerName = String.format("%s %s %s", ContentLayoutDataConstants.NAME_PREFIX, firstName, lastName);
 	}
 
 	/**
@@ -288,7 +276,7 @@ public class ContentLayoutData {
 	 * @param invoiceNo invoice number to set
 	 */
 	public void setInvoiceNo(String invoiceNo) {
-		this.invoiceNo = String.format("%s %s", INVOICE_NO_PREFIX, invoiceNo);
+		this.invoiceNo = String.format("%s %s", ContentLayoutDataConstants.INVOICE_NO_PREFIX, invoiceNo);
 	}
 
 	/**
@@ -297,7 +285,7 @@ public class ContentLayoutData {
 	 * @return string encoded invoice number
 	 */
 	public String getInvoiceNoWithoutPrefix() {
-		return invoiceNo != null ? invoiceNo.replace(INVOICE_NO_PREFIX + " ", "") : "";
+		return invoiceNo != null ? invoiceNo.replace(ContentLayoutDataConstants.INVOICE_NO_PREFIX + " ", "") : "";
 	}
 
 	/**
@@ -361,7 +349,8 @@ public class ContentLayoutData {
 	 * @param time string-encoded and DIN 5008:2020 formatted time to set.
 	 */
 	public void setTutoringAppointmentDateTime(String date, String time) {
-		this.tutoringAppointmentDateTime = String.format("%s %s %s", TUTORING_APPOINTMENT_PREFIX, date, time);
+		this.tutoringAppointmentDateTime = String.format("%s %s %s",
+				ContentLayoutDataConstants.TUTORING_APPOINTMENT_PREFIX, date, time);
 	}
 
 	/**
@@ -400,18 +389,38 @@ public class ContentLayoutData {
 		this.fontColor = fontColor;
 	}
 
+	/**
+	 * Gets font
+	 * 
+	 * @return {@link PDFont}
+	 */
 	public PDFont getFont() {
 		return font;
 	}
 
+	/**
+	 * Sets font.
+	 * 
+	 * @param font {@link PDFont}
+	 */
 	public void setFont(PDFont font) {
 		this.font = font;
 	}
 
+	/**
+	 * Gets italic font
+	 * 
+	 * @return {@link PDFont}
+	 */
 	public PDFont getItalicFont() {
 		return italicFont;
 	}
 
+	/**
+	 * Sets italic font
+	 * 
+	 * @param italicFont {@link PDFont}
+	 */
 	public void setItalicFont(PDFont italicFont) {
 		this.italicFont = italicFont;
 	}
@@ -696,6 +705,11 @@ public class ContentLayoutData {
 		this.hasMainContentLayoutData = hasMainContentLayoutData;
 	}
 
+	/**
+	 * Gets invoice positions as full price
+	 * 
+	 * @return {@link String}
+	 */
 	public String getInvoicePositionsAsFullPrice() {
 		if (tableRowsFullPrice == null) {
 			double sum = 0;
@@ -718,6 +732,11 @@ public class ContentLayoutData {
 		return tableRowsFullPrice;
 	}
 
+	/**
+	 * Gets split delimiter
+	 * 
+	 * @return string encoded delimiter
+	 */
 	public String getSplitDelimiter() {
 		return splitDelimiter;
 	}

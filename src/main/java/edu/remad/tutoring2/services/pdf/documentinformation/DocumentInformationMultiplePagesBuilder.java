@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 
 import edu.remad.tutoring2.services.pdf.ContentLayoutData;
+import edu.remad.tutoring2.services.pdf.utilities.DocumentInformationUtilities;
 
 public class DocumentInformationMultiplePagesBuilder {
 
@@ -188,16 +189,16 @@ public class DocumentInformationMultiplePagesBuilder {
 	public PDDocumentInformation build() {
 		PDDocumentInformation documentInformation = new PDDocumentInformation();
 		documentInformation.setAuthor(this.authors != null && this.authors.length > 1
-				? DocumentInformationUtilities.arrayToString(authors)
+				? DocumentInformationUtilities.joinsArrayToString(authors)
 				: this.authors[0]);
 		String invoiceTitle = this.invoiceNumbers != null && this.invoiceNumbers.length > 1
-				? DocumentInformationUtilities.longArrayToJoinedString(invoiceNumbers).replace("Rechnungsnummer:", "").replace("  ", " ")
+				? DocumentInformationUtilities.joinsLongsToString(invoiceNumbers).replace("Rechnungsnummer:", "").replace("  ", " ")
 				: String.valueOf(this.invoiceNumbers[0]);
 		documentInformation.setTitle(INVOICE_TITLE_PREFIX + invoiceTitle);
 		documentInformation.setCreator(this.creators != null && this.creators.length > 1
-				? DocumentInformationUtilities.arrayToString(this.creators)
+				? DocumentInformationUtilities.joinsArrayToString(this.creators)
 				: this.creators[0]);
-		String subject = DocumentInformationUtilities.arrayToString(subjects).replace("Rechnungsnummer:", "").replace("Rechnung", "").replace("  ", " ");
+		String subject = DocumentInformationUtilities.joinsArrayToString(subjects).replace("Rechnungsnummer:", "").replace("Rechnung", "").replace("  ", " ");
 		documentInformation.setSubject(this.subjects != null && this.subjects.length > 1
 				? "Rechnungsnummern:" + subject
 				: this.subjects[0]);

@@ -21,7 +21,6 @@ import edu.remad.tutoring2.models.UserEntity;
 import edu.remad.tutoring2.services.pdf.ContentLayoutData;
 import edu.remad.tutoring2.services.pdf.constants.ContentLayoutDataConstants;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationBuilder;
-import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationUtilities;
 import edu.remad.tutoring2.services.pdf.exceptions.PdfUtilitiesException;
 
 public final class PdfUtilities {

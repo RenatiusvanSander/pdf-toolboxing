@@ -15,6 +15,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import edu.remad.tutoring2.services.pdf.ContentLayoutData;
+import edu.remad.tutoring2.services.pdf.utilities.PageContentLayoutUtilities;
 
 public class SinglePageContentLayouter {
 
