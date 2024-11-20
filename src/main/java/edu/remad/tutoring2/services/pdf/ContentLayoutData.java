@@ -425,26 +425,56 @@ public class ContentLayoutData {
 		this.italicFont = italicFont;
 	}
 
+	/**
+	 * Gets contact street and house number
+	 * 
+	 * @return {@link String}
+	 */
 	public String getContactStreetHouseNo() {
 		return contactStreetHouseNo;
 	}
 
+	/**
+	 * Sets contact street and house number
+	 * 
+	 * @param contactStreetHouseNo string encoded street and house number
+	 */
 	public void setContactStreetHouseNo(String contactStreetHouseNo) {
 		this.contactStreetHouseNo = contactStreetHouseNo;
 	}
 
+	/**
+	 * Gets contact zip location
+	 * 
+	 * @return {@link String}
+	 */
 	public String getContactZipAndLocation() {
 		return contactZipAndLocation;
 	}
 
+	/**
+	 * Sets contact zip and location
+	 * 
+	 * @param contactZipAndLocation string zip and location separated by empty space
+	 */
 	public void setContactZipAndLocation(String contactZipAndLocation) {
 		this.contactZipAndLocation = contactZipAndLocation;
 	}
 
+	/**
+	 * Sets date time formatter
+	 * 
+	 * @param simpleDateFormat a date time formatter
+	 */
 	public void setDayFormatter(DateTimeFormatter simpleDateFormat) {
 		this.dateFormatter = simpleDateFormat;
 	}
 
+	/**
+	 * Gets date formatter
+	 * 
+	 * @return {@link DateTimeFormatter}
+	 */
 	public DateTimeFormatter getDateFormatter() {
 		return dateFormatter;
 	}
@@ -681,6 +711,12 @@ public class ContentLayoutData {
 		return this.documentInformationKeywords;
 	}
 
+	/**
+	 * Gets document information keyword by index
+	 * 
+	 * @param index keyword index starts by 0
+	 * @return {@link String}
+	 */
 	public String getDocumentInformationKeywordByIndex(int index) {
 		if (index == this.documentInformationKeywords.length || index > this.documentInformationKeywords.length) {
 			return "";
@@ -689,6 +725,11 @@ public class ContentLayoutData {
 		return this.documentInformationKeywords[index];
 	}
 
+	/**
+	 * Gets subject
+	 * 
+	 * @return {@link String}
+	 */
 	public String getSubject() {
 		if ((subject == null || subject.length() < 2) && (invoiceNoLabel != null && invoiceNo != null)) {
 			subject = invoiceNoLabel + " " + invoiceNo;
@@ -697,10 +738,20 @@ public class ContentLayoutData {
 		return subject;
 	}
 
+	/**
+	 * Checks is main content layout data
+	 * 
+	 * @return {@code true} or {@code false}
+	 */
 	public boolean isHasMainContentLayoutData() {
 		return hasMainContentLayoutData;
 	}
 
+	/**
+	 * Sets has main content
+	 * 
+	 * @param hasMainContentLayoutData {@code true} means has main content
+	 */
 	public void setHasMainContentLayoutData(boolean hasMainContentLayoutData) {
 		this.hasMainContentLayoutData = hasMainContentLayoutData;
 	}

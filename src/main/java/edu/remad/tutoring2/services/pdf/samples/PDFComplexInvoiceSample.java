@@ -115,7 +115,7 @@ public class PDFComplexInvoiceSample {
 
 			byte[] invoice = out.toByteArray();
 			out.close();
-			System.out.println("Document created.");
+			System.out.println("Document created." + invoice);
 		} catch (IOException e) {
 			throw new PDFComplexInvoiceBuilderException("Demo Document not saved as Byte-Array.", e);
 		}
