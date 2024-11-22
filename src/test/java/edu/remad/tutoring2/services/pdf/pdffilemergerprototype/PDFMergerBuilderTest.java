@@ -21,6 +21,7 @@ import edu.remad.tutoring2.services.pdf.PDFCreationBuilder;
 import edu.remad.tutoring2.services.pdf.documentinformation.DocumentInformationBuilder;
 import edu.remad.tutoring2.services.pdf.exceptions.PDFMergerBuilderException;
 import edu.remad.tutoring2.services.pdf.pdffilemerger.PDFMergerBuilder;
+import edu.remad.tutoring2.services.pdf.samples.PDFCreationSample;
 
 public class PDFMergerBuilderTest {
 
@@ -106,11 +107,11 @@ public class PDFMergerBuilderTest {
 
 	@Test
 	public void buildTest() throws IOException {
-		List<ContentLayoutData> contentLayoutData1 = List.of(PDFCreationBuilder.createPage1());
+		List<ContentLayoutData> contentLayoutData1 = List.of(PDFCreationSample.createPage1());
 		PDFCreationBuilder builder1 = new PDFCreationBuilder().contentLayoutData(contentLayoutData1);
 		InputStream firstFile = new ByteArrayInputStream(builder1.buildAsByteArray());
 
-		List<ContentLayoutData> contentLayoutData2 = List.of(PDFCreationBuilder.createPage2());
+		List<ContentLayoutData> contentLayoutData2 = List.of(PDFCreationSample.createPage2());
 		PDFCreationBuilder builder2 = new PDFCreationBuilder().contentLayoutData(contentLayoutData2);
 		InputStream secondFile = new ByteArrayInputStream(builder2.buildAsByteArray());
 
