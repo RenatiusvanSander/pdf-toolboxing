@@ -479,70 +479,156 @@ public class ContentLayoutData {
 		return dateFormatter;
 	}
 
+	/**
+	 * Sets date formatter
+	 * 
+	 * @param dateFormatter date formatter to set
+	 */
 	public void setDateFormatter(DateTimeFormatter dateFormatter) {
 		this.dateFormatter = dateFormatter;
 	}
 
+	/**
+	 * Gets time formatter
+	 * 
+	 * @return {@link DateTimeFormatter}
+	 */
 	public DateTimeFormatter getTimeFormatter() {
 		return timeFormatter;
 	}
 
+	/**
+	 * Sets fime formatter
+	 * 
+	 * @param timeFormatter {@link DateTimeFormatter}-object to set
+	 */
 	public void setTimeFormatter(DateTimeFormatter timeFormatter) {
 		this.timeFormatter = timeFormatter;
 	}
 
+	/**
+	 * Gets table header color object
+	 * 
+	 * @return {@link Color}
+	 */
 	public Color getTableHeaderColor() {
 		return tableHeaderColor;
 	}
 
+	/**
+	 * Sets table header color
+	 * 
+	 * @param color {@link Color}-object to set for header
+	 */
 	public void setTableHeaderColor(Color color) {
 		this.tableHeaderColor = color;
 	}
 
+	/**
+	 * Gets table body color
+	 * 
+	 * @return {@link Color}
+	 */
 	public Color getTableBodyColor() {
 		return tableBodyColor;
 	}
 
+	/**
+	 * Sets table body color object.
+	 * 
+	 * @param color {@link {@link Color}-object
+	 */
 	public void setTableBodyColor(Color color) {
 		this.tableBodyColor = color;
 	}
 
+	/**
+	 * Sets payment methods
+	 * 
+	 * @param paymentMethods list of string encoded payment methods
+	 */
 	public void setPaymentMethods(List<String> paymentMethods) {
 		this.paymentMethods = paymentMethods;
 	}
 
+	/**
+	 * Gets payment method
+	 * 
+	 * @return sets string encoded payment methods
+	 */
 	public List<String> getPaymentMethods() {
 		return paymentMethods;
 	}
 
+	/**
+	 * Sets tutoring appointment.
+	 * 
+	 * @param s string encoded tutoring appointment
+	 */
 	public void setTutoringAppointmentDate(String s) {
 		this.tutoringAppointmentDate = s;
 	}
 
+	/**
+	 * Gets tutoring appointment date
+	 * 
+	 * @return string encoded tutoring appointment date
+	 */
 	public String getTutoringAppointmentDate() {
 		return tutoringAppointmentDate;
 	}
 
+	/**
+	 * Sets capital font size
+	 * 
+	 * @param capitalFontSize font size in points as floating point number
+	 */
 	public void setCapitalFontSize(float capitalFontSize) {
 		this.capitalFontSize = capitalFontSize;
 	}
 
+	/**
+	 * Gets capital font size
+	 * 
+	 * @return points in in floating number format
+	 */
 	public float getCapitalFontSize() {
 		return capitalFontSize;
 	}
 
+	/**
+	 * Sets text font size
+	 * 
+	 * @param textFontSize text font size in points as floating point number
+	 */
 	public void setTextFontSize(float textFontSize) {
 		this.textFontSize = textFontSize;
 	}
 
+	/**
+	 * Gets text font size
+	 * 
+	 * @return text font size in floating point number
+	 */
 	public float getTextFontSize() {
 		return textFontSize;
 	}
 
+	/**
+	 * Sets payment method font size
+	 * 
+	 * @param paymentMethodFontSize font size of payment methods as floating point
+	 *                              number
+	 */
 	public void setPaymentMethodFontSize(float paymentMethodFontSize) {
 		this.paymentMethodFontSize = paymentMethodFontSize;
 	}
 
+	/**
+	 * Gets payment method font size
+	 * 
+	 * @return payment method font size as floating point number
+	 */
 	public float getPaymentMethodFontSize() {
 		return paymentMethodFontSize;
 	}
