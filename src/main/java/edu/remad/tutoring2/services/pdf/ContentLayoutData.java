@@ -633,30 +633,65 @@ public class ContentLayoutData {
 		return paymentMethodFontSize;
 	}
 
+	/**
+	 * Sets bottom line
+	 * 
+	 * @param bottomLine bottom line text to set
+	 */
 	public void setbottomLine(String bottomLine) {
 		this.bottomLine = bottomLine;
 	}
 
+	/**
+	 * Gets bottom line
+	 * 
+	 * @return {@link String}
+	 */
 	public String getBottomLine() {
 		return bottomLine;
 	}
 
+	/**
+	 * Sets bottom line font size
+	 * 
+	 * @param bottomLineFontSize bottom line's font size as floating point number
+	 */
 	public void setBottomLineFontSize(int bottomLineFontSize) {
 		this.bottomLineFontSize = bottomLineFontSize;
 	}
 
+	/**
+	 * Gets bottom line font size
+	 * 
+	 * @return font size in points as floating point number
+	 */
 	public int getBottomLineFontSize() {
 		return bottomLineFontSize;
 	}
 
+	/**
+	 * Sets bottom line font color
+	 * 
+	 * @param bottomLineFontColor bottom line's color object to set
+	 */
 	public void setBottomLineFontColor(Color bottomLineFontColor) {
 		this.bottomLineFontColor = bottomLineFontColor;
 	}
 
+	/**
+	 * Gets bottom font color object
+	 * 
+	 * @return {@link Color}
+	 */
 	public Color getBottomLineFontColor() {
 		return bottomLineFontColor;
 	}
 
+	/**
+	 * Sets bottom line font color
+	 * 
+	 * @param bottomRectColor bottom font color object to set
+	 */
 	public void setBottomRectColor(Color bottomRectColor) {
 		this.bottomRectColor = bottomRectColor;
 	}
@@ -665,134 +700,299 @@ public class ContentLayoutData {
 		return bottomRectColor;
 	}
 
+	/**
+	 * Sets bottom line width
+	 * 
+	 * @param bottomLineWidth bottom line width in points as floating point number
+	 */
 	public void setBottomLineWidth(float bottomLineWidth) {
 		this.bottomLineWidth = bottomLineWidth;
 	}
 
+	/**
+	 * Gets bottom line width
+	 * 
+	 * @return line width in points as floating point number
+	 */
 	public float getBottomLineWidth() {
 		return bottomLineWidth;
 	}
 
+	/**
+	 * Sets bottom rectangle
+	 * 
+	 * @param bottomRect {}@link Rectangle}
+	 */
 	public void setBottomRect(Rectangle bottomRect) {
 		this.bottomRect = bottomRect;
 	}
 
+	/**
+	 * Gets bottom Rectangle
+	 * 
+	 * @return {@link Rectangle}
+	 */
 	public Rectangle getBottomRect() {
 		return bottomRect;
 	}
 
+	/**
+	 * Sets autho sign text
+	 * 
+	 * @param authoSign autho sign text to set
+	 */
 	public void setAuthoSign(String authoSign) {
 		this.authoSign = authoSign;
 	}
 
+	/**
+	 * Gets Autho sign text
+	 * 
+	 * @return {@link String}
+	 */
 	public String getAuthoSign() {
 		return authoSign;
 	}
 
+	/**
+	 * Sets autho sign color
+	 * 
+	 * @param authoSignColor autho sign text color
+	 */
 	public void setAuthoSignColor(Color authoSignColor) {
 		this.authoSignColor = authoSignColor;
 	}
 
+	/**
+	 * Gets autho sign color
+	 * 
+	 * @return {@link Color}
+	 */
 	public Color getAuthoSignColor() {
 		return authoSignColor;
 	}
 
+	/**
+	 * Sets table cells widths
+	 * 
+	 * @param tableCellWidths cell widths to set
+	 */
 	public void setTableCellWidths(int[] tableCellWidths) {
 		this.tableCellWidths = tableCellWidths;
 	}
 
+	/**
+	 * Gets table cell widths
+	 * 
+	 * @return table cell widths as integers
+	 */
 	public int[] getTableCellWidths() {
 		return tableCellWidths;
 	}
 
+	/**
+	 * Sets table cell height
+	 * 
+	 * @param tableCellHeight table cell height
+	 */
 	public void setTableCellHeight(int tableCellHeight) {
 		this.tableCellHeight = tableCellHeight;
 	}
 
+	/**
+	 * Gets table cell height
+	 * 
+	 * @return table cell height as integer
+	 */
 	public int getTableCellHeight() {
 		return tableCellHeight;
 	}
 
+	/**
+	 * Sets table headers
+	 * 
+	 * @param tableHeaders table headers value
+	 */
 	public void setTableHeaders(List<String> tableHeaders) {
 		this.tableHeaders = tableHeaders;
 	}
 
+	/**
+	 * Gets table header value
+	 * 
+	 * @return list of {@link Strings}
+	 */
 	public List<String> getTableHeaders() {
 		return tableHeaders;
 	}
 
+	/**
+	 * Sets payment method color object
+	 * 
+	 * @param paymentMethodColor payment method color to set
+	 */
 	public void setPaymentMethodColor(Color paymentMethodColor) {
 		this.paymentMethodColor = paymentMethodColor;
 	}
 
+	/**
+	 * Gets payment method color
+	 * 
+	 * @return {@link Color}
+	 */
 	public Color getPaymentMethodColor() {
 		return paymentMethodColor;
 	}
 
+	/**
+	 * Sets table rows
+	 * 
+	 * @param tableRows table rows to set
+	 */
 	public void setTableRows(List<Map<String, String>> tableRows) {
 		this.tableRows = tableRows;
 	}
 
+	/**
+	 * Gets table rows
+	 * 
+	 * @return List of key value pairs
+	 */
 	public List<Map<String, String>> getTableRows() {
 		return tableRows;
 	}
 
+	/**
+	 * Sets page width
+	 * 
+	 * @param pageWidth page width as Integer to set
+	 */
 	public void setPageWidth(int pageWidth) {
 		this.pageWidth = pageWidth;
 	}
 
+	/**
+	 * Gets page width
+	 * 
+	 * @return page width as integer
+	 */
 	public int getPageWidth() {
 		return pageWidth;
 	}
 
+	/**
+	 * Sets page height
+	 * 
+	 * @param pageHeight page height as integer to set
+	 */
 	public void setPageHeight(int pageHeight) {
 		this.pageHeight = pageHeight;
 	}
 
+	/**
+	 * Gets page height
+	 * 
+	 * @return page height as integer
+	 */
 	public int getPageHeight() {
 		return this.pageHeight;
 	}
 
+	/**
+	 * Sets invoice number label
+	 * 
+	 * @param invoiceNoLabel invoice number label
+	 */
 	public void setInvoiceNoLabel(String invoiceNoLabel) {
 		this.invoiceNoLabel = invoiceNoLabel;
 	}
 
+	/**
+	 * Sets invoice date label
+	 * 
+	 * @param invoiceDateLabel invoice date label to set
+	 */
 	public void setInvoiceDateLabel(String invoiceDateLabel) {
 		this.invoiceDateLabel = invoiceDateLabel;
 	}
 
+	/**
+	 * Sets invoice performance date label
+	 * 
+	 * @param invoicePerformanceDateLabel invoice performance date label to set
+	 */
 	public void setInvoicePerformanceDateLabel(String invoicePerformanceDateLabel) {
 		this.invoicePerformanceDateLabel = invoicePerformanceDateLabel;
 	}
 
+	/**
+	 * Sets value added tax disclaimer text
+	 * 
+	 * @param valueAddedTaxDisclaimerText tax disclaimer value to set
+	 */
 	public void setValueAddedTaxDisclaimerText(String[] valueAddedTaxDisclaimerText) {
 		this.valueAddedTaxDisclaimerText = valueAddedTaxDisclaimerText;
 	}
 
+	/**
+	 * Gets value for tax disclaimer text
+	 * 
+	 * @return array of {@link String}
+	 */
 	public String[] getValueAddedTaxDisclaimerText() {
 		return this.valueAddedTaxDisclaimerText;
 	}
 
+	/**
+	 * Gets creator
+	 * 
+	 * @return {@link String}
+	 */
 	public String getCreator() {
 		return this.creator;
 	}
 
+	/**
+	 * Sets creator
+	 * 
+	 * @param creator creator's name to set
+	 */
 	public void setCreator(String creator) {
 		this.creator = creator;
 	}
 
+	/**
+	 * Sets document information creator
+	 * 
+	 * @param documentInformationCreator creator's name of document information
+	 */
 	public void setDocumentInformationCreator(String documentInformationCreator) {
 		this.documentInformationCreator = documentInformationCreator;
 	}
 
+	/**
+	 * Gets document information creator
+	 * 
+	 * @return creator as {@link String}
+	 */
 	public String getDocumentInformationCreator() {
 		return this.documentInformationCreator;
 	}
 
+	/**
+	 * Sets document information keywords
+	 * 
+	 * @param documentInformationKeywords array of {@link String}s as keywords
+	 */
 	public void setDocumentInformationKeywords(String[] documentInformationKeywords) {
 		this.documentInformationKeywords = documentInformationKeywords;
 	}
 
+	/**
+	 * Gets document information keywords
+	 * 
+	 * @return string encoded keywords
+	 */
 	public String[] getDocumentInformationKeywords() {
 		return this.documentInformationKeywords;
 	}
