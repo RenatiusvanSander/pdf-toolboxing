@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -36,15 +38,18 @@ public class PDFComplexInvoiceSample {
 			PDPage firstPage = new PDPage(PDRectangle.A4);
 			document.addPage(firstPage);
 
+			LocalDateTime tutoringAppointmentDate = LocalDateTime.of(2026, Month.JANUARY, 28, 0, 0);
+			LocalDateTime invoiceCreationDate = LocalDateTime.of(2026, Month.JANUARY, 29, 0, 0);
+
 			ContentLayoutData contentLayout = new ContentLayoutData();
-			contentLayout.setCustomerName("Sharon", "Tetteh");
+			contentLayout.setCustomerName("Jane", "Doe");
 			File logo = new File(ContentLayoutDataConstants.LOGO_FILE_PATH);
 			contentLayout.setLogo(logo);
 			contentLayout.setFont(PDType1Font.HELVETICA);
 			contentLayout.setItalicFont(PDType1Font.HELVETICA_OBLIQUE);
 			contentLayout.setFontColor(Color.BLACK);
-			contentLayout.setStreetHouseNumber("Karl-Arnold-Ring", "26");
-			contentLayout.setLocationZipCode("21109", "Hamburg");
+			contentLayout.setStreetHouseNumber("May-Muster-Allee", "26");
+			contentLayout.setLocationZipCode("22109", "Hamburg");
 			contentLayout.setContactCompany(ContentLayoutDataConstants.CONTACT_COMPANY);
 			contentLayout.setContactName(ContentLayoutDataConstants.CONTACT_NAME);
 			contentLayout.setContactStreetHouseNo(ContentLayoutDataConstants.CONTACT_STREET_HOUSE_NO);
@@ -59,8 +64,8 @@ public class PDFComplexInvoiceSample {
 			contentLayout.setTableBodyColor(ContentLayoutDataConstants.TABLE_BODY_COLOR);
 			contentLayout.setPaymentMethods(ContentLayoutDataConstants.PAYMENT_METHODS);
 			contentLayout.setPaymentMethodColor(ContentLayoutDataConstants.PAYMENT_METHOD_COLOR);
-			contentLayout.setTutoringAppointmentDate("12/07/2024");
-			contentLayout.setInvoiceCreationDate("12/07/2024");
+			contentLayout.setTutoringAppointmentDate(PdfUtilities.convertLocalDateTimeToStringDate(tutoringAppointmentDate, contentLayout.getDayFormatter()));
+			contentLayout.setInvoiceCreationDate(PdfUtilities.convertLocalDateTimeToStringDate(invoiceCreationDate, contentLayout.getDayFormatter()));
 			contentLayout.setCapitalFontSize(ContentLayoutDataConstants.CAPITAL_FONT_SIZE);
 			contentLayout.setTextFontSize(ContentLayoutDataConstants.TEXT_FONT_SIZE);
 			contentLayout.setPaymentMethodFontSize(ContentLayoutDataConstants.PAYMENT_METHOD_FONT_SIZE);
@@ -103,7 +108,8 @@ public class PDFComplexInvoiceSample {
 			pageContenLayouter.build();
 			contentStream.close();
 
-			DocumentInformationBuilder documentInformationBuilder = PdfUtilities.populateDocumentInformationBuilder(contentLayout);
+			DocumentInformationBuilder documentInformationBuilder = PdfUtilities
+					.populateDocumentInformationBuilder(contentLayout);
 			document.setDocumentInformation(documentInformationBuilder.build());
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			try {

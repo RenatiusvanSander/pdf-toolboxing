@@ -475,7 +475,7 @@ public class ContentLayoutData {
 	 * 
 	 * @return {@link DateTimeFormatter}
 	 */
-	public DateTimeFormatter getDateFormatter() {
+	public DateTimeFormatter getDayFormatter() {
 		return dateFormatter;
 	}
 
@@ -1085,5 +1085,9 @@ public class ContentLayoutData {
 	 */
 	public void setSplitDelimiter(String splitDelimiter) {
 		this.splitDelimiter = splitDelimiter;
+	}
+
+	public String getTutoringAppointmentDate(String convertLocalDateTimeToStringDate) {
+		return tutoringAppointmentDate;
 	}
 }
