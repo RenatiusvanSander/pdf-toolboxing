@@ -113,14 +113,14 @@ public class PDFMergerSample {
 		LocalDateTime invoiDate = LocalDateTime.of(2026,Month.JULY,12,0,0);
 		LocalDateTime invoiceTutoringDate = LocalDateTime.of(2026,Month.JULY,12,10,0);
 		InvoiceEntity invoice1 = createInvoice(1, 2.5f, invoiDate, invoiceTutoringDate, LocalDateTime.now());
-		List<ContentLayoutData> contentLayoutData1 = List.of(PdfUtilities.createContentLayoutData2(invoice1));
+		List<ContentLayoutData> contentLayoutData1 = List.of(PdfUtilities.createContentLayoutData(invoice1));
 		byte[] firstPdfFile = PDFMergerSample.class.getClassLoader().getResourceAsStream("pdf/test_pdf_1.pdf").readAllBytes();
 		InputStream firstFile = new ByteArrayInputStream(firstPdfFile);
 
 		LocalDateTime invoiDate2 = LocalDateTime.of(2026,Month.JULY,13,0,0);
 		LocalDateTime invoiceTutoringDate2 = LocalDateTime.of(2026,Month.JULY,13,10,0);
 		InvoiceEntity invoice2 = createInvoice(1, 2.5f, invoiDate2, invoiceTutoringDate2, LocalDateTime.now());
-		List<ContentLayoutData> contentLayoutData2 = List.of(PdfUtilities.createContentLayoutData2(invoice2));
+		List<ContentLayoutData> contentLayoutData2 = List.of(PdfUtilities.createContentLayoutData(invoice2));
 		byte[] secondPdfFile = PDFMergerSample.class.getClassLoader().getResourceAsStream("pdf/test_pdf_2.pdf").readAllBytes();
 		InputStream secondFile = new ByteArrayInputStream(secondPdfFile);
 

@@ -35,7 +35,7 @@ public class PDFComplexInvoiceBuilder {
 	 * @return byte array of invoice PDF
 	 */
 	public byte[] build() {
-		return buildDocument(PdfUtilities.createContentLayoutData2(invoice));
+		return buildDocument(PdfUtilities.createContentLayoutData(invoice));
 	}
 
 	private byte[] buildDocument(ContentLayoutData contentLayout) {
@@ -70,7 +70,7 @@ public class PDFComplexInvoiceBuilder {
 	 */
 	public PDPage buildPage() {
 		try (PDDocument document = new PDDocument()) {
-			ContentLayoutData contentLayout = PdfUtilities.createContentLayoutData2(invoice);
+			ContentLayoutData contentLayout = PdfUtilities.createContentLayoutData(invoice);
 			PDPage firstPage = ContentLayoutDataConstants.PAGE;
 			document.addPage(firstPage);
 			buildPageContent(contentLayout, document, firstPage);
