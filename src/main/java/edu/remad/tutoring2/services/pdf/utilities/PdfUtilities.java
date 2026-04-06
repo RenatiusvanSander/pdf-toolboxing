@@ -115,11 +115,8 @@ public final class PdfUtilities {
 	 * @param dateAndTimeFormatters several Date and Time Formatters for customizing
 	 * @return {@link ContentLayoutData}
 	 */
-	public static ContentLayoutData createContentLayoutData2(InvoiceEntity invoice, DateTimeFormatter... dateAndTimeFormatters) {
+	public static ContentLayoutData createContentLayoutData2(InvoiceEntity invoice, DateTimeFormatter dayFormatter, DateTimeFormatter timeFormatter) {
 		try {
-			// TO DO rework
-			// DateTimeFormatter
-			
 			UserEntity user = invoice.getInvoiceUser();
 			AddressEntity address = user.getAddresses().get(0);
 
@@ -140,8 +137,8 @@ public final class PdfUtilities {
 			contentLayoutData.setContactMobile(ContentLayoutDataConstants.CONTACT_MOBILE);
 			contentLayoutData.setContactEmail(ContentLayoutDataConstants.CONTACT_EMAIL);
 			contentLayoutData.setInvoiceNo(String.valueOf(invoice.getInvoiceNo()));
-			contentLayoutData.setDayFormatter(TimeAppConstants.GERMAN_DATE_FORMATTER);
-			contentLayoutData.setTimeFormatter(TimeAppConstants.TIME_FORMATTER);
+			contentLayoutData.setDayFormatter(dayFormatter != null ? dayFormatter : TimeAppConstants.GERMAN_DATE_FORMATTER);
+			contentLayoutData.setTimeFormatter(timeFormatter != null ? timeFormatter : TimeAppConstants.TIME_FORMATTER);
 			contentLayoutData.setTableHeaderColor(ContentLayoutDataConstants.TABLE_HEADER_COLOR);
 			contentLayoutData.setTableBodyColor(ContentLayoutDataConstants.TABLE_BODY_COLOR);
 			contentLayoutData.setPaymentMethods(ContentLayoutDataConstants.PAYMENT_METHODS);
