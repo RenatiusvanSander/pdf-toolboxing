@@ -64,8 +64,8 @@ public class PDFComplexInvoiceSample {
 			contentLayout.setTableBodyColor(ContentLayoutDataConstants.TABLE_BODY_COLOR);
 			contentLayout.setPaymentMethods(ContentLayoutDataConstants.PAYMENT_METHODS);
 			contentLayout.setPaymentMethodColor(ContentLayoutDataConstants.PAYMENT_METHOD_COLOR);
-			contentLayout.setTutoringAppointmentDate(PdfUtilities.convertLocalDateTimeToStringDate(tutoringAppointmentDate, contentLayout.getDayFormatter()));
-			contentLayout.setInvoiceCreationDate(PdfUtilities.convertLocalDateTimeToStringDate(invoiceCreationDate, contentLayout.getDayFormatter()));
+			contentLayout.setTutoringAppointmentDate(PdfUtilities.convertLocalDateTimeToStringDate(tutoringAppointmentDate, contentLayout.getDateFormatter()));
+			contentLayout.setInvoiceCreationDate(PdfUtilities.convertLocalDateTimeToStringDate(invoiceCreationDate, contentLayout.getDateFormatter()));
 			contentLayout.setCapitalFontSize(ContentLayoutDataConstants.CAPITAL_FONT_SIZE);
 			contentLayout.setTextFontSize(ContentLayoutDataConstants.TEXT_FONT_SIZE);
 			contentLayout.setPaymentMethodFontSize(ContentLayoutDataConstants.PAYMENT_METHOD_FONT_SIZE);

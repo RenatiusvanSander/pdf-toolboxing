@@ -475,7 +475,7 @@ public class ContentLayoutData {
 	 * 
 	 * @return {@link DateTimeFormatter}
 	 */
-	public DateTimeFormatter getDayFormatter() {
+	public DateTimeFormatter getDateFormatter() {
 		return dateFormatter;
 	}
 
